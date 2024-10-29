@@ -1,0 +1,8 @@
+{
+  "name": "cinemate",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/cinemate/src",
+  "// targets": "to see all targets run: nx show project cinemate --web",
+  "targets": {}
+}

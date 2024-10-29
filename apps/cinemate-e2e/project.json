@@ -1,0 +1,8 @@
+{
+  "name": "cinemate-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/cinemate-e2e/src",
+  "implicitDependencies": ["cinemate"],
+  "// targets": "to see all targets run: nx show project cinemate-e2e --web",
+  "targets": {}
+}
