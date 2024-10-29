@@ -2,12 +2,6 @@
 
 <template>
   <main>
-    <header>
-      <nav>
-        <NuxtLink to="/"> Home </NuxtLink>
-        <NuxtLink to="/about"> About </NuxtLink>
-      </nav>
-    </header>
     <nuxt-page />
   </main>
 </template>
