@@ -25,4 +25,21 @@ export default defineNuxtConfig({
   vite: {
     plugins: [nxViteTsPaths()],
   },
+
+  modules: ['@nuxtjs/tailwindcss'],
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css'
+        }
+      ],
+      script: [
+        {
+          src: 'https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js'
+        }
+      ],
+    }
+  }
 });
