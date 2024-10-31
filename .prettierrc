@@ -1,5 +1,15 @@
 {
   "tabWidth": 2,
   "singleQuote": true,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "printWidth": 80,
+  "arrowParens": "always",
+  "singleAttributePerLine": true,
+  "htmlWhitespaceSensitivity": "strict",
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "prettier-plugin-classnames",
+    "prettier-plugin-merge"
+  ],
+  "vueIndentScriptAndStyle": true
 }

@@ -2,13 +2,17 @@
   <div>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Featured Movies
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="mov in movies" :key="mov.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="mov in movies"
+          :key="mov.id"
+        >
           <MovieCard
             :id="mov.id"
             :poster_path="mov.poster_path"
@@ -26,18 +30,23 @@
             :original_title="mov.original_title"
           />
         </li>
-        <br /><br />
+        <br />
+        <br />
       </ul>
     </section>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Featured Tv Series
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="tvSeries in series" :key="tvSeries.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="tvSeries in series"
+          :key="tvSeries.id"
+        >
           <SeriesCard
             :id="tvSeries.id"
             :poster_path="tvSeries.poster_path"
@@ -60,16 +69,17 @@
 </template>
 
 <script setup lang="ts">
-import { useDiscoverStore } from '../stores/discover';
-import { Movie, Series } from '../utils/movie.interface';
+  import { useDiscoverStore } from '../stores/discover';
+  import { Movie, Series } from '../utils/movie.interface';
+  import { ref, Ref, onMounted } from 'vue';
 
-const discoverStore = useDiscoverStore();
-const movies: Ref<Movie[]> = ref<Movie[]>([]);
-const series: Ref<Series[]> = ref<Series[]>([]);
+  const discoverStore = useDiscoverStore();
+  const movies: Ref<Movie[]> = ref<Movie[]>([]);
+  const series: Ref<Series[]> = ref<Series[]>([]);
 
-onMounted(async () => {
-  await discoverStore.fetchMoviesAndSeries();
-  movies.value = discoverStore.movies;
-  series.value = discoverStore.series;
-});
+  onMounted(async () => {
+    await discoverStore.fetchMoviesAndSeries();
+    movies.value = discoverStore.movies;
+    series.value = discoverStore.series;
+  });
 </script>

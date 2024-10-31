@@ -20,7 +20,7 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/apps/cinemate',
-      provider: 'v8',
-    },
-  },
+      provider: 'v8'
+    }
+  }
 });

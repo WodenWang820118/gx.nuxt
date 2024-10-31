@@ -8,22 +8,22 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   devServer: {
     host: 'localhost',
-    port: 4200,
+    port: 4200
   },
   typescript: {
     typeCheck: true,
     tsConfig: {
-      extends: '../tsconfig.app.json', // Nuxt copies this string as-is to the `./.nuxt/tsconfig.json`, therefore it needs to be relative to that directory
-    },
+      extends: '../tsconfig.app.json' // Nuxt copies this string as-is to the `./.nuxt/tsconfig.json`, therefore it needs to be relative to that directory
+    }
   },
   imports: {
-    autoImport: true,
+    autoImport: true
   },
 
   css: ['~/assets/css/styles.scss'],
 
   vite: {
-    plugins: [nxViteTsPaths()],
+    plugins: [nxViteTsPaths()]
   },
 
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
         {
           src: 'https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js'
         }
-      ],
+      ]
     }
   },
   features: {

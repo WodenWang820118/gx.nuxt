@@ -1,17 +1,18 @@
 <template>
   <div>
-    <form class="max-w-md mx-auto">
+    <form class="mx-auto max-w-md">
       <label
         for="default-search"
-        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >Search</label
+        class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >
+        Search</label
       >
       <div class="relative">
         <div
-          class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
+          class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3"
         >
           <svg
-            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            class="h-4 w-4 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -27,10 +28,13 @@
           </svg>
         </div>
         <input
+          id="default-search"
           v-model="searchTerm"
           type="text"
-          id="default-search"
-          class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 ps-10 text-sm
+            text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600
+            dark:bg-gray-700 dark:text-white dark:placeholder-gray-400
+            dark:focus:border-blue-500 dark:focus:ring-blue-500"
           placeholder="Search Movies, Series..."
           required
         />
@@ -40,13 +44,17 @@
     <section>
       <h1
         v-if="movies.length"
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Movie Results
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="mov in movies" :key="mov.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="mov in movies"
+          :key="mov.id"
+        >
           <MovieCard
             :id="mov.id"
             :poster_path="mov.poster_path"
@@ -70,13 +78,17 @@
     <section>
       <h1
         v-if="series.length"
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Tv Series Results
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="tvSeries in series" :key="tvSeries.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="tvSeries in series"
+          :key="tvSeries.id"
+        >
           <SeriesCard
             :id="tvSeries.id"
             :poster_path="tvSeries.poster_path"
@@ -99,16 +111,18 @@
 </template>
 
 <script setup lang="ts">
-import { useSearchStore } from '../stores/search';
+  import { useSearchStore } from '../stores/search';
+  import { Movie, Series } from '../utils/movie.interface';
+  import { ref, Ref, watch } from 'vue';
 
-const searchTerm = ref('');
-const movies: Ref<Movie[]> = ref([]);
-const series: Ref<Series[]> = ref([]);
-const searchStore = useSearchStore();
+  const searchTerm = ref('');
+  const movies: Ref<Movie[]> = ref([]);
+  const series: Ref<Series[]> = ref([]);
+  const searchStore = useSearchStore();
 
-watch(searchTerm, async (newSearchTerm) => {
-  await searchStore.searchContent(newSearchTerm);
-  movies.value = searchStore.movies;
-  series.value = searchStore.series;
-});
+  watch(searchTerm, async (newSearchTerm) => {
+    await searchStore.searchContent(newSearchTerm);
+    movies.value = searchStore.movies;
+    series.value = searchStore.series;
+  });
 </script>

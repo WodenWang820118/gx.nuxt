@@ -16,7 +16,7 @@ export const useItemStore = defineStore('item', () => {
 
   const setItem = (newItem: Movie | Series) => {
     item.value = newItem;
-  }
+  };
 
   return {
     item,

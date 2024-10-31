@@ -47,6 +47,28 @@
   "targetDefaults": {
     "e2e-ci--**/*": {
       "dependsOn": ["^build-static"]
+    },
+    "format": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.prettierrc",
+        "{workspaceRoot}/.prettierignore"
+      ],
+      "executor": "@nx/linter:prettier",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "{projectRoot}/**/*.{ts,tsx,js,jsx,json,scss,css,md,vue}"
+        ]
+      }
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e", "format"]
+      }
     }
   }
 }

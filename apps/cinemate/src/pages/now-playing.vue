@@ -2,13 +2,17 @@
   <div>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Now Playing Movies
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="mov in movies" :key="mov.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="mov in movies"
+          :key="mov.id"
+        >
           <MovieCard
             :id="mov.id"
             :poster_path="mov.poster_path"
@@ -31,13 +35,14 @@
 </template>
 
 <script setup lang="ts">
-import { useNowPlayingStore } from '../stores/now-playing';
-import { Movie } from '../utils/movie.interface';
+  import { useNowPlayingStore } from '../stores/now-playing';
+  import { Movie } from '../utils/movie.interface';
+  import { ref, Ref, onMounted } from 'vue';
 
-const nowPlayingStore = useNowPlayingStore();
-const movies: Ref<Movie[]> = ref([]);
-onMounted(async () => {
-  await nowPlayingStore.fetchNowPlayingMovies();
-  movies.value = nowPlayingStore.nowPlayingMovies;
-});
+  const nowPlayingStore = useNowPlayingStore();
+  const movies: Ref<Movie[]> = ref([]);
+  onMounted(async () => {
+    await nowPlayingStore.fetchNowPlayingMovies();
+    movies.value = nowPlayingStore.nowPlayingMovies;
+  });
 </script>

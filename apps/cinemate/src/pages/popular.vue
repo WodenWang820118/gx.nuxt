@@ -2,13 +2,20 @@
   <div>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Popular Movies
       </h1>
 
-      <ul v-if="movies.length" class="grid grid-cols-5 gap">
-        <li v-for="mov in movies" :key="mov.id">
+      <ul
+        v-if="movies.length"
+        class="gap grid grid-cols-5"
+      >
+        <li
+          v-for="mov in movies"
+          :key="mov.id"
+        >
           <MovieCard
             :id="mov.id"
             :poster_path="mov.poster_path"
@@ -31,13 +38,20 @@
     </section>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Popular Tv Series
       </h1>
 
-      <ul v-if="series.length" class="grid grid-cols-5 gap">
-        <li v-for="tvSeries in series" :key="tvSeries.id">
+      <ul
+        v-if="series.length"
+        class="gap grid grid-cols-5"
+      >
+        <li
+          v-for="tvSeries in series"
+          :key="tvSeries.id"
+        >
           <SeriesCard
             :id="tvSeries.id"
             :poster_path="tvSeries.poster_path"
@@ -60,17 +74,17 @@
 </template>
 
 <script setup lang="ts">
-import { usePopularStore } from '../stores/popular';
-import { Series, Movie } from '../utils/movie.interface';
-import { onMounted } from 'vue';
+  import { usePopularStore } from '../stores/popular';
+  import { Series, Movie } from '../utils/movie.interface';
+  import { ref, Ref, onMounted } from 'vue';
 
-const popularStore = usePopularStore();
-const movies: Ref<Movie[]> = ref<Movie[]>([]);
-const series: Ref<Series[]> = ref<Series[]>([]);
+  const popularStore = usePopularStore();
+  const movies: Ref<Movie[]> = ref<Movie[]>([]);
+  const series: Ref<Series[]> = ref<Series[]>([]);
 
-onMounted(async () => {
-  await popularStore.fetchPopularContent();
-  movies.value = popularStore.popularMovies;
-  series.value = popularStore.popularSeries;
-});
+  onMounted(async () => {
+    await popularStore.fetchPopularContent();
+    movies.value = popularStore.popularMovies;
+    series.value = popularStore.popularSeries;
+  });
 </script>

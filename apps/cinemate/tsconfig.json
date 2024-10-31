@@ -1,5 +1,7 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "types": ["@nuxt/types"]
+  },
   "files": [],
   "include": [".nuxt/nuxt.d.ts"],
   "references": [

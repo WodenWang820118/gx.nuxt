@@ -2,13 +2,17 @@
   <div>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Top Rated Movies
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="mov in movies" :key="mov.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="mov in movies"
+          :key="mov.id"
+        >
           <MovieCard
             :id="mov.id"
             :poster_path="mov.poster_path"
@@ -31,13 +35,17 @@
     </section>
     <section>
       <h1
-        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
       >
         Top Rated Tv Series
       </h1>
 
-      <ul class="grid grid-cols-5 gap">
-        <li v-for="tvSeries in series" :key="tvSeries.id">
+      <ul class="gap grid grid-cols-5">
+        <li
+          v-for="tvSeries in series"
+          :key="tvSeries.id"
+        >
           <SeriesCard
             :id="tvSeries.id"
             :poster_path="tvSeries.poster_path"
@@ -60,14 +68,16 @@
 </template>
 
 <script setup lang="ts">
-import { useTopRatedStore } from '../stores/top-rated';
-import { Series, Movie } from '../utils/movie.interface';
-const movies = ref<Movie[]>([]);
-const series = ref<Series[]>([]);
-const topRatedStore = useTopRatedStore();
-onMounted(async () => {
-  await topRatedStore.fetchTopRated();
-  movies.value = topRatedStore.topMovies;
-  series.value = topRatedStore.topSeries;
-});
+  import { useTopRatedStore } from '../stores/top-rated';
+  import { Series, Movie } from '../utils/movie.interface';
+  import { ref, onMounted } from 'vue';
+
+  const movies = ref<Movie[]>([]);
+  const series = ref<Series[]>([]);
+  const topRatedStore = useTopRatedStore();
+  onMounted(async () => {
+    await topRatedStore.fetchTopRated();
+    movies.value = topRatedStore.topMovies;
+    series.value = topRatedStore.topSeries;
+  });
 </script>
