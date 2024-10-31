@@ -4,7 +4,7 @@
       <h1
         class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
       >
-        Top Rated Movies
+        Featured Movies
       </h1>
 
       <ul class="grid grid-cols-5 gap">
@@ -33,7 +33,7 @@
       <h1
         class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
       >
-        Top Rated Tv Series
+        Featured Tv Series
       </h1>
 
       <ul class="grid grid-cols-5 gap">
@@ -60,14 +60,16 @@
 </template>
 
 <script setup lang="ts">
-import { useTopRatedStore } from '../stores/top-rated';
-import { Series, Movie } from '../utils/movie.interface';
-const movies = ref<Movie[]>([]);
-const series = ref<Series[]>([]);
-const topRatedStore = useTopRatedStore();
+import { useDiscoverStore } from '../stores/discover';
+import { Movie, Series } from '../utils/movie.interface';
+
+const discoverStore = useDiscoverStore();
+const movies: Ref<Movie[]> = ref<Movie[]>([]);
+const series: Ref<Series[]> = ref<Series[]>([]);
+
 onMounted(async () => {
-  await topRatedStore.fetchTopRated();
-  movies.value = topRatedStore.topMovies;
-  series.value = topRatedStore.topSeries;
+  await discoverStore.fetchMoviesAndSeries();
+  movies.value = discoverStore.movies;
+  series.value = discoverStore.series;
 });
 </script>

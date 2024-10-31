@@ -4,7 +4,7 @@
       <h1
         class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
       >
-        Upcoming Movies
+        Now Playing Movies
       </h1>
 
       <ul class="grid grid-cols-5 gap">
@@ -16,7 +16,6 @@
             :overview="mov.overview"
             :release_date="mov.release_date"
             :popularity="mov.popularity"
-            :item="mov"
             :original_language="mov.original_language"
             :adult="mov.adult"
             :vote_average="mov.vote_average"
@@ -26,20 +25,19 @@
             :original_title="mov.original_title"
           />
         </li>
-        <br /><br />
       </ul>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useUpcomingStore } from '../stores/upcoming';
+import { useNowPlayingStore } from '../stores/now-playing';
 import { Movie } from '../utils/movie.interface';
 
+const nowPlayingStore = useNowPlayingStore();
 const movies: Ref<Movie[]> = ref([]);
-const upcomingStore = useUpcomingStore();
 onMounted(async () => {
-  await upcomingStore.fetchUpcomingMovies();
-  movies.value = upcomingStore.upcomingMovies;
+  await nowPlayingStore.fetchNowPlayingMovies();
+  movies.value = nowPlayingStore.nowPlayingMovies;
 });
 </script>

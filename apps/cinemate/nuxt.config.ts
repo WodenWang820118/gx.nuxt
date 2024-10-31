@@ -26,7 +26,7 @@ export default defineNuxtConfig({
     plugins: [nxViteTsPaths()],
   },
 
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
   app: {
     head: {
       link: [
@@ -41,5 +41,8 @@ export default defineNuxtConfig({
         }
       ],
     }
+  },
+  features: {
+    devLogs: true
   }
 });
