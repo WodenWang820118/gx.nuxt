@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "dev:cinemate": "nx serve cinemate",
-    "format-cinemate": "nx format:write --projects=cinemate --skip-nx-cache"
+    "format-cinemate": "nx format:write --projects=cinemate --skip-nx-cache",
+    "build-cinemate": "nx build cinemate"
   },
   "private": true,
   "devDependencies": {
