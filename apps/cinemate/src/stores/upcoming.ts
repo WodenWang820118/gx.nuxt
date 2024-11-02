@@ -7,6 +7,12 @@ export const useUpcomingStore = defineStore('upcoming', () => {
   const upcomingMovies = ref<Movie[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
+  const moviePagination = ref({
+    currentPage: 1,
+    totalPages: 0,
+    totalResults: 0,
+    pageSize: 10
+  });
 
   // Getters
   const sortedByDate = computed(() => {
@@ -19,16 +25,26 @@ export const useUpcomingStore = defineStore('upcoming', () => {
   const totalMovies = computed(() => upcomingMovies.value.length);
 
   // Actions
-  async function fetchUpcomingMovies() {
+  const fetchUpcomingMovies = async (page = 1) => {
     isLoading.value = true;
     error.value = null;
 
     try {
       const data = await $fetch<{
         upcomingMovies: TMDBResponse<Movie>;
-      }>('api/movie/upcoming');
+      }>('api/movie/upcoming', {
+        params: {
+          page: page.toString()
+        }
+      });
       if (data) {
         upcomingMovies.value = data.upcomingMovies.results || [];
+        moviePagination.value = {
+          currentPage: page,
+          totalPages: data.upcomingMovies.total_pages,
+          totalResults: data.upcomingMovies.total_results,
+          pageSize: 10
+        };
       }
     } catch (err) {
       error.value = 'Failed to fetch upcoming movies';
@@ -36,7 +52,7 @@ export const useUpcomingStore = defineStore('upcoming', () => {
     } finally {
       isLoading.value = false;
     }
-  }
+  };
 
   function resetState() {
     upcomingMovies.value = [];
@@ -48,6 +64,7 @@ export const useUpcomingStore = defineStore('upcoming', () => {
     upcomingMovies,
     isLoading,
     error,
+    moviePagination,
     // Getters
     sortedByDate,
     totalMovies,
