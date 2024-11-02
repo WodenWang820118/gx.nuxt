@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <section>
+  <UContainer>
+    <section class="mb-12">
+      <!-- Added margin bottom for section spacing -->
       <h1
         class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
           md:text-5xl lg:text-6xl dark:text-white"
@@ -8,8 +9,11 @@
         Featured Movies
       </h1>
 
-      <ul class="gap grid grid-cols-5">
-        <li
+      <div
+        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+          xl:grid-cols-5"
+      >
+        <div
           v-for="mov in movies"
           :key="mov.id"
         >
@@ -29,12 +33,11 @@
             :genre_ids="mov.genre_ids"
             :original_title="mov.original_title"
           />
-        </li>
-        <br />
-        <br />
-      </ul>
+        </div>
+      </div>
     </section>
-    <section>
+
+    <section class="mb-12">
       <h1
         class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
           md:text-5xl lg:text-6xl dark:text-white"
@@ -42,8 +45,11 @@
         Featured Tv Series
       </h1>
 
-      <ul class="gap grid grid-cols-5">
-        <li
+      <div
+        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+          xl:grid-cols-5"
+      >
+        <div
           v-for="tvSeries in series"
           :key="tvSeries.id"
         >
@@ -62,10 +68,10 @@
             :genre_ids="tvSeries.genre_ids"
             :original_name="tvSeries.original_name"
           />
-        </li>
-      </ul>
+        </div>
+      </div>
     </section>
-  </div>
+  </UContainer>
 </template>
 
 <script setup lang="ts">
