@@ -1,8 +1,10 @@
 <template>
-  <div
-    class="max-w-sm rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700
-      dark:bg-gray-800"
-  >
+  <UCard>
+    <template #header>
+      <div class="h-8">
+        {{ title }}
+      </div>
+    </template>
     <NuxtLink
       :to="`/item/${title}`"
       @click="
@@ -29,42 +31,29 @@
         alt="Movie Image"
       />
     </NuxtLink>
-    <div class="p-5">
-      <span>
-        <h5
-          class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
-        >
-          {{ title }}
-        </h5>
-      </span>
-      <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-        Release Date: {{ release_date }}
-      </p>
-      <p
-        v-if="overview"
-        class="inline-flex items-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm
-          font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4
-          focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700
-          dark:focus:ring-blue-800"
-      >
-        {{ overview.slice(0, 75) }}...
-      </p>
-      <p
-        v-else
-        class="inline-flex items-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm
-          font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4
-          focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700
-          dark:focus:ring-blue-800"
-      >
-        No overview available
-      </p>
-    </div>
-  </div>
+    <p
+      v-if="overview"
+      class="inline-flex items-center break-all rounded-lg bg-blue-700 px-3 py-2 text-justify
+        text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4
+        focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700
+        dark:focus:ring-blue-800"
+    >
+      {{ overview.slice(0, 75) }}...
+    </p>
+    <p
+      v-else
+      class="inline-flex items-center rounded-lg bg-blue-700 px-3 py-2 text-sm font-medium
+        text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300
+        dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    >
+      No overview available
+    </p>
+  </UCard>
 </template>
 
 <script setup lang="ts">
   import { useItemStore } from '../stores/item';
-  import type { Movie } from '../utils/movie.interface';
+  import { Movie } from '../utils/movie.interface';
   import { Ref, ref } from 'vue';
   defineProps<Movie>();
   const imageUrl: Ref<string> = ref('https://image.tmdb.org/t/p/w500');

@@ -1,4 +1,4 @@
-import { Movie, TMDBResponse } from '../../../utils/movie.interface';
+import { Series, TMDBResponse } from '../../../utils/movie.interface';
 import { createError, defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event);
     const page = query.page || '1';
     const AccessToken = process.env.NUXT_ACCESS_TOKEN;
-    const movieUrl = `https://api.themoviedb.org/3/discover/movie?page=${page}`;
+    const seriesUrl = `https://api.themoviedb.org/3/discover/tv?page=${page}`;
     // Fetch options
     const fetchOptions = {
       method: 'GET',
@@ -15,10 +15,10 @@ export default defineEventHandler(async (event) => {
         Authorization: `Bearer ${AccessToken}`
       }
     };
-    const moviesResponse = await fetch(movieUrl, fetchOptions);
-    const movies = (await moviesResponse.json()) as TMDBResponse<Movie>;
+    const seriesResponse = await fetch(seriesUrl, fetchOptions);
+    const series = (await seriesResponse.json()) as TMDBResponse<Series>;
 
-    return { movies };
+    return { series };
   } catch (error) {
     throw createError({
       statusCode: 500,
