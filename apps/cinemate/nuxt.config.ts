@@ -1,6 +1,5 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { defineNuxtConfig } from 'nuxt/config';
-import { join } from 'path';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -47,9 +46,6 @@ export default defineNuxtConfig({
     devLogs: true
   },
   nitro: {
-    preset: 'vercel',
-    output: {
-      dir: join('..', '..', '.vercel/cinemate')
-    }
+    preset: 'vercel'
   }
 });
