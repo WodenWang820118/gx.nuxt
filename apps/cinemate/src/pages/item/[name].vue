@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <MovieCard
+  <UContainer>
+    <MovieItem
       v-if="item && isMovie(item)"
       v-bind="getMovieProps(item)"
     />
 
-    <SeriesCard
+    <SeriesItem
       v-if="item && isSeries(item)"
       v-bind="getSeriesProps(item)"
     />
-  </div>
+  </UContainer>
 </template>
 
 <script setup lang="ts">

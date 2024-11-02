@@ -9,7 +9,7 @@
   const headerLinks = [
     {
       label: 'Cinemate',
-      labelClass: 'text-2xl font-bold'
+      labelClass: 'text-2xl font-bold pl-14 mx-4'
     },
     {
       label: 'Home',

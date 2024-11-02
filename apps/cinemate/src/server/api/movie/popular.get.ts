@@ -5,7 +5,6 @@ export default defineEventHandler(async (event) => {
   try {
     const query = getQuery(event);
     const page = query.page || '1';
-
     const AccessToken = process.env.NUXT_ACCESS_TOKEN;
     const fetchOptions = {
       method: 'GET',

@@ -63,20 +63,8 @@
             :key="mov.id"
           >
             <MovieCard
-              :id="mov.id"
-              :poster_path="mov.poster_path"
-              :title="mov.title"
-              :overview="mov.overview"
-              :release_date="mov.release_date"
-              :popularity="mov.popularity"
+              v-bind="mov"
               :item="mov"
-              :original_language="mov.original_language"
-              :adult="mov.adult"
-              :vote_average="mov.vote_average"
-              :vote_count="mov.vote_count"
-              :video="mov.video"
-              :genre_ids="mov.genre_ids"
-              :original_title="mov.original_title"
             />
           </li>
         </ul>
@@ -102,19 +90,8 @@
             :key="tvSeries.id"
           >
             <SeriesCard
-              :id="tvSeries.id"
-              :poster_path="tvSeries.poster_path"
-              :name="tvSeries.name"
-              :overview="tvSeries.overview"
-              :first_air_date="tvSeries.first_air_date"
-              :popularity="tvSeries.popularity"
+              v-bind="tvSeries"
               :item="tvSeries"
-              :original_language="tvSeries.original_language"
-              :adult="tvSeries.adult"
-              :vote_average="tvSeries.vote_average"
-              :vote_count="tvSeries.vote_count"
-              :genre_ids="tvSeries.genre_ids"
-              :original_name="tvSeries.original_name"
             />
           </li>
         </ul>

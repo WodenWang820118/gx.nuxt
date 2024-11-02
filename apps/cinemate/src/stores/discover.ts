@@ -10,22 +10,39 @@ export const useDiscoverStore = defineStore('discover', () => {
   const error = ref(null);
 
   // Actions
-  const fetchMoviesAndSeries = async () => {
+  const fetchMovies = async () => {
     isLoading.value = true;
     error.value = null;
 
     try {
       const data = await $fetch<{
         movies: TMDBResponse<Movie>;
-        series: TMDBResponse<Series>;
       }>('api/movie/discover');
       if (data) {
         movies.value = data ? data.movies.results : [];
-        series.value = data ? data.series.results : [];
       }
     } catch (err) {
       error.value = err;
       console.error('Error fetching movies and series:', err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+  const fetchSeries = async () => {
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      const data = await $fetch<{
+        series: TMDBResponse<Series>;
+      }>('api/series/discover');
+      if (data) {
+        series.value = data ? data.series.results : [];
+      }
+    } catch (err) {
+      error.value = err;
+      console.error('Error fetching series:', err);
     } finally {
       isLoading.value = false;
     }
@@ -36,6 +53,7 @@ export const useDiscoverStore = defineStore('discover', () => {
     series,
     isLoading,
     error,
-    fetchMoviesAndSeries
+    fetchMovies,
+    fetchSeries
   };
 });

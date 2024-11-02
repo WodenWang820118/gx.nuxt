@@ -1,10 +1,12 @@
 import { createError, defineEventHandler } from 'h3';
 import { Movie, TMDBResponse } from '../../../utils/movie.interface';
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
   try {
+    const query = getQuery(event);
+    const page = query.page || '1';
     const AccessToken = process.env.NUXT_ACCESS_TOKEN;
-    const upcomingMoviesUrl = 'https://api.themoviedb.org/3/movie/upcoming';
+    const upcomingMoviesUrl = `https://api.themoviedb.org/3/movie/upcoming?page=${page}`;
     const fetchOptions = {
       method: 'GET',
       headers: {
@@ -19,7 +21,7 @@ export default defineEventHandler(async () => {
   } catch (error) {
     createError({
       statusCode: 500,
-      message: error
+      message: String(error)
     });
   }
 });

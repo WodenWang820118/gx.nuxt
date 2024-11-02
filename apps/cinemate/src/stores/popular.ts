@@ -10,14 +10,14 @@ export const usePopularStore = defineStore('popular', () => {
     currentPage: 1,
     totalPages: 0,
     totalResults: 0,
-    pageSize: 20
+    pageSize: 10
   });
   const popularSeries = ref<Series[]>([]);
   const seriesPagination = ref<PaginationState>({
     currentPage: 1,
     totalPages: 0,
     totalResults: 0,
-    pageSize: 20
+    pageSize: 10
   });
   const isLoading = ref(false);
   const error = ref(null);
@@ -64,8 +64,6 @@ export const usePopularStore = defineStore('popular', () => {
           page: page.toString()
         }
       });
-
-      console.log('Popular Series: ', data);
 
       if (data) {
         popularSeries.value = data.popularSeries.results;
