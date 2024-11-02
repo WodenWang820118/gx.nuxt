@@ -1,5 +1,5 @@
 import { createError, defineEventHandler } from 'h3';
-import { Movie, TMDBResponse } from '../../../utils/movie.interface';
+import { Series, TMDBResponse } from '../../../utils/movie.interface';
 
 export default defineEventHandler(async (event) => {
   try {
@@ -14,13 +14,11 @@ export default defineEventHandler(async (event) => {
         Authorization: `Bearer ${AccessToken}`
       }
     };
-
-    const popularMoviesUrl = `https://api.themoviedb.org/3/movie/popular?page=${page}`;
-    const popularMoviesResponse = await fetch(popularMoviesUrl, fetchOptions);
-    const popularMovies =
-      (await popularMoviesResponse.json()) as TMDBResponse<Movie>;
-
-    return { popularMovies };
+    const popularSeriesUrl = `https://api.themoviedb.org/3/tv/popular?page=${page}`;
+    const popularSeriesResponse = await fetch(popularSeriesUrl, fetchOptions);
+    const popularSeries =
+      (await popularSeriesResponse.json()) as TMDBResponse<Series>;
+    return { popularSeries };
   } catch (error) {
     createError({
       statusCode: 500,
