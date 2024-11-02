@@ -47,6 +47,7 @@ export default defineNuxtConfig({
     devLogs: true
   },
   nitro: {
+    preset: 'vercel-edge',
     output: {
       publicDir: join(__dirname, '..', '..', 'dist/apps/cinemate')
     }
