@@ -1,12 +1,16 @@
 <template>
   <section class="mb-12">
-    <!-- Added margin bottom for section spacing -->
-    <h1
-      class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
-        md:text-5xl lg:text-6xl dark:text-white"
+    <div
+      ref="titleRef"
+      class="title"
     >
-      Upcoming Movies
-    </h1>
+      <h1
+        class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900
+          md:text-5xl lg:text-6xl dark:text-white"
+      >
+        Upcoming Movies
+      </h1>
+    </div>
 
     <div
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
@@ -41,10 +45,12 @@
 <script setup lang="ts">
   import { useUpcomingStore } from '../stores/upcoming';
   import { Movie } from '../utils/movie.interface';
-  import { ref, Ref, onMounted } from 'vue';
+  import { ref, Ref, onMounted, watch } from 'vue';
+  import { PaginationState } from '../utils/pagination.interface';
 
   const movies: Ref<Movie[]> = ref([]);
   const upcomingStore = useUpcomingStore();
+  const titleRef = ref<HTMLElement | null>(null);
   const moviePagination = ref<PaginationState>({
     currentPage: 1,
     totalResults: 0,
@@ -53,9 +59,19 @@
   });
 
   // Methods
+  const scrollToTitle = () => {
+    if (titleRef.value && movies.value.length) {
+      titleRef.value.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   const handleMoviePageChange = async (page: number) => {
     console.log('Movie Page to:', page);
     await upcomingStore.fetchUpcomingMovies(page);
+    scrollToTitle();
   };
 
   // Watch for store changes
