@@ -5,7 +5,7 @@
   "scripts": {
     "dev:cinemate": "nx serve cinemate",
     "format-cinemate": "nx format:write --projects=cinemate --skip-nx-cache",
-    "build-cinemate": "nx build cinemate"
+    "build-cinemate": "nx build cinemate --prod"
   },
   "private": true,
   "devDependencies": {

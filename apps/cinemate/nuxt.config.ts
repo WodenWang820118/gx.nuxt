@@ -46,6 +46,9 @@ export default defineNuxtConfig({
     devLogs: true
   },
   nitro: {
-    preset: 'vercel'
+    preset: 'vercel',
+    output: {
+      dir: '../../.vercel/output'
+    }
   }
 });
