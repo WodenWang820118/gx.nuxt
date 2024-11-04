@@ -184,7 +184,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { Product } from '../utils/product.interface';
+
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
 
@@ -247,7 +249,7 @@
   };
 
   const createProduct = async () => {
-    const { data: product, error } = await useFetch(
+    const { data: product, error } = await useFetch<Product>(
       '/api/products/create-new-product',
       {
         query: {

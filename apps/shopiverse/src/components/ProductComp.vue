@@ -1,26 +1,26 @@
 <template>
-  <div :id="`productcomp${product.id}`">
+  <div :id="`productcomp${id}`">
     <div
       class="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow
         dark:border-gray-700 dark:bg-gray-800"
     >
-      <NuxtLink :to="`product-${product.id}`">
+      <NuxtLink :to="`product-${id}`">
         <img
           class="rounded-t-lg p-8"
-          :src="`${product.image}`"
+          :src="`${image}`"
           alt="product image"
         />
       </NuxtLink>
       <div class="px-5 pb-5">
-        <NuxtLink :to="`product-${product.id}`">
+        <NuxtLink :to="`product-${id}`">
           <h5
             class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
-            >{{ product.title }}</h5
+            >{{ title }}</h5
           >
         </NuxtLink>
-        <NuxtLink :to="`product-${product.id}`">
+        <NuxtLink :to="`product-${id}`">
           <p class="mb-3 truncate text-gray-500 dark:text-gray-400">{{
-            product.description
+            description
           }}</p>
         </NuxtLink>
         <div class="mb-5 mt-2.5 flex items-center">
@@ -33,12 +33,12 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-3xl font-bold text-gray-900 dark:text-white">{{
-            product.price
+            price
           }}</span>
 
           <span
             class="text-3xl font-bold text-gray-900 line-through dark:text-white"
-            >{{ product.price * 2 }}</span
+            >{{ price * 2 }}</span
           >
           <button
             class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white
@@ -55,8 +55,18 @@
   </div>
 </template>
 
-<script setup>
-  defineProps(['product']);
+<script setup lang="ts">
+  import { Product } from '../utils/product.interface';
+  import { useCart } from '../composables/state';
+
+  defineProps<{
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    image: string;
+    product: Product; // Add this prop
+  }>();
 
   const user = useSupabaseUser();
   const cart = useCart();

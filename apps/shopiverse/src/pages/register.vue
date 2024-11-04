@@ -129,15 +129,15 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
   const email = useState(() => null);
   const password = useState(() => null);
   const userName = useState(() => null);
   const address = useState(() => null);
-  const successMsg = useState(() => false);
-  const errorMsg = useState(() => false);
+  const successMsg = useState<string>(() => '');
+  const errorMsg = useState<string>(() => '');
 
   if (user.value) {
     await navigateTo('/');

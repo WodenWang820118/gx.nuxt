@@ -7,11 +7,5 @@ module.exports = [
     // Override or add rules here
     rules: {}
   },
-  {
-    files: ['**/*.vue'],
-    languageOptions: {
-      parserOptions: { parser: require('@typescript-eslint/parser') }
-    }
-  },
   { ignores: ['.nuxt/**', '.output/**', 'node_modules'] }
 ];

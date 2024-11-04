@@ -1,14 +1,14 @@
 <template>
   <div class="flex min-h-screen flex-col bg-white dark:bg-gray-800">
     <button
-      id="theme-toggle"
+      ref="themeToggleBtn"
       type="button"
       class="rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none
         focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700
         dark:focus:ring-gray-700"
     >
       <svg
-        id="theme-toggle-dark-icon"
+        ref="themeToggleDarkIcon"
         class="hidden h-5 w-5"
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -19,7 +19,7 @@
         ></path>
       </svg>
       <svg
-        id="theme-toggle-light-icon"
+        ref="themeToggleLightIcon"
         class="hidden h-5 w-5"
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -34,48 +34,40 @@
     </button>
     <Header />
     <main>
-      <slot />
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
     </main>
   </div>
 </template>
 
-<script setup>
-  if (process.client) {
-    // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+<script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  const themeToggleDarkIcon = ref(null);
+  const themeToggleLightIcon = ref(null);
+  const themeToggleBtn = ref(null);
+
+  onMounted(() => {
+    // Initial theme setup
     if (
       localStorage.getItem('color-theme') === 'dark' ||
       (!('color-theme' in localStorage) &&
         window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
       document.documentElement.classList.add('dark');
+      themeToggleLightIcon.value.classList.remove('hidden');
     } else {
       document.documentElement.classList.remove('dark');
+      themeToggleDarkIcon.value.classList.remove('hidden');
     }
 
-    var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-    var themeToggleLightIcon = document.getElementById(
-      'theme-toggle-light-icon'
-    );
+    // Theme toggle handler
+    themeToggleBtn.value.addEventListener('click', () => {
+      // Toggle icons
+      themeToggleDarkIcon.value.classList.toggle('hidden');
+      themeToggleLightIcon.value.classList.toggle('hidden');
 
-    // Change the icons inside the button based on previous settings
-    if (
-      localStorage.getItem('color-theme') === 'dark' ||
-      (!('color-theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      themeToggleLightIcon.classList.remove('hidden');
-    } else {
-      themeToggleDarkIcon.classList.remove('hidden');
-    }
-
-    var themeToggleBtn = document.getElementById('theme-toggle');
-
-    themeToggleBtn.addEventListener('click', function () {
-      // toggle icons inside button
-      themeToggleDarkIcon.classList.toggle('hidden');
-      themeToggleLightIcon.classList.toggle('hidden');
-
-      // if set via local storage previously
+      // Update theme
       if (localStorage.getItem('color-theme')) {
         if (localStorage.getItem('color-theme') === 'light') {
           document.documentElement.classList.add('dark');
@@ -84,8 +76,6 @@
           document.documentElement.classList.remove('dark');
           localStorage.setItem('color-theme', 'light');
         }
-
-        // if NOT set via local storage previously
       } else {
         if (document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.remove('dark');
@@ -96,5 +86,5 @@
         }
       }
     });
-  }
+  });
 </script>

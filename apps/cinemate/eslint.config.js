@@ -1,8 +1,8 @@
 // const { FlatCompat } = require('@eslint/eslintrc');
 // const js = require('@eslint/js');
 const baseConfig = require('../../eslint.config.js');
-const vueParser = require('vue-eslint-parser');
-const eslintPluginVue = require('eslint-plugin-vue');
+// const vueParser = require('vue-eslint-parser');
+// const eslintPluginVue = require('eslint-plugin-vue');
 
 // const compat = new FlatCompat({
 //   baseDirectory: __dirname,
@@ -18,10 +18,10 @@ module.exports = [
   },
   {
     ignores: ['.nuxt/**', '.output/**', 'node_modules']
-  },
-  {
-    rules: {}
   }
+  // {
+  //   rules: {}
+  // }
   // {
   //   files: ['**/*.vue'],
   //   languageOptions: {

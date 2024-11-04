@@ -114,7 +114,8 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { useCart } from '../composables/state';
   const cart = useCart();
   const calcTotalCart = () => {
     let total = 0;

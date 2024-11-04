@@ -1,26 +1,19 @@
 <template>
   <div class="grid h-16 place-items-center">
-    <div
-      id="checkout-page"
-      class="border p-4"
-    >
-      <!-- Display a payment form -->
-      <form
-        id="payment-form"
-        @submit.prevent="handleSubmit"
-      >
-        <div id="payment-element">
+    <div class="border p-4">
+      <form @submit.prevent="handleSubmit">
+        <div ref="paymentRef">
           <!--Stripe.js injects the Payment Element-->
         </div>
-        <button id="submit">
+        <button ref="submitButtonRef">
           <div
-            id="spinner"
+            ref="spinnerRef"
             class="spinner hidden"
           ></div>
-          <span id="button-text">Pay now</span>
+          <span ref="buttonTextRef">Pay now</span>
         </button>
         <div
-          id="payment-message"
+          ref="paymentMessageRef"
           class="hidden"
         ></div>
       </form>
@@ -28,24 +21,35 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+  import { ref, onMounted } from 'vue';
+  import { useCart } from '../composables/state';
+
   const config = useRuntimeConfig();
   const { stripePK } = config.public;
   let stripe;
   let elements;
   let clientSecret;
+
+  // Template refs
+  const paymentRef = ref(null);
+  const submitButtonRef = ref(null);
+  const spinnerRef = ref(null);
+  const buttonTextRef = ref(null);
+  const paymentMessageRef = ref(null);
+
   const cart = useCart();
+
   const calcTotalCart = () => {
     let total = 0;
     cart.value.forEach((product) => {
       total += product.price;
     });
-
     return total * 100;
   };
 
   onMounted(async () => {
-    stripe = await Stripe(stripePK);
+    stripe = await stripe(stripePK);
     const initialize = async () => {
       const { data } = await useFetch('/api/stripe/paymentintent', {
         method: 'post',
@@ -56,6 +60,7 @@
 
       clientSecret = data.value;
       console.log(clientSecret);
+
       const appearance = {
         theme: 'stripe'
       };
@@ -70,8 +75,7 @@
       });
 
       const paymentElement = elements.create('payment', paymentElementOptions);
-
-      paymentElement.mount('#payment-element');
+      paymentElement.mount(paymentRef.value);
     };
 
     initialize();
@@ -84,16 +88,10 @@
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        // Make sure to change this to your payment completion page
         return_url: 'https://shopiversee.netlify.app/payment-success'
       }
     });
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
     if (error.type === 'card_error' || error.type === 'validation_error') {
       showMessage(error.message);
     } else {
@@ -130,31 +128,29 @@
     }
   }
 
-  // ------- UI helpers -------
-
   function showMessage(messageText) {
-    const messageContainer = document.querySelector('#payment-message');
+    if (paymentMessageRef.value) {
+      paymentMessageRef.value.classList.remove('hidden');
+      paymentMessageRef.value.textContent = messageText;
 
-    messageContainer.classList.remove('hidden');
-    messageContainer.textContent = messageText;
-
-    setTimeout(function () {
-      messageContainer.classList.add('hidden');
-      messageContainer.textContent = '';
-    }, 4000);
+      setTimeout(() => {
+        paymentMessageRef.value.classList.add('hidden');
+        paymentMessageRef.value.textContent = '';
+      }, 4000);
+    }
   }
 
-  // Show a spinner on payment submission
-  function setLoading(isLoading) {
-    if (isLoading) {
-      // Disable the button and show a spinner
-      document.querySelector('#submit').disabled = true;
-      document.querySelector('#spinner').classList.remove('hidden');
-      document.querySelector('#button-text').classList.add('hidden');
-    } else {
-      document.querySelector('#submit').disabled = false;
-      document.querySelector('#spinner').classList.add('hidden');
-      document.querySelector('#button-text').classList.remove('hidden');
+  function setLoading(isLoading: boolean) {
+    if (submitButtonRef.value && spinnerRef.value && buttonTextRef.value) {
+      submitButtonRef.value.disabled = isLoading;
+
+      if (isLoading) {
+        spinnerRef.value.classList.remove('hidden');
+        buttonTextRef.value.classList.add('hidden');
+      } else {
+        spinnerRef.value.classList.add('hidden');
+        buttonTextRef.value.classList.remove('hidden');
+      }
     }
   }
 </script>

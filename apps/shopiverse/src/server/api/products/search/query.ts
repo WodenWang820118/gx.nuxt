@@ -4,19 +4,21 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
-  const queryItem = query.input;
+  const queryItem = query?.input || '';
+
+  const safeQueryItem = String(queryItem);
   const items = await prisma.products.findMany({
     where: {
       OR: [
         {
           title: {
-            contains: queryItem,
+            contains: safeQueryItem,
             mode: 'insensitive'
           }
         },
         {
           description: {
-            contains: queryItem,
+            contains: safeQueryItem,
             mode: 'insensitive'
           }
         }

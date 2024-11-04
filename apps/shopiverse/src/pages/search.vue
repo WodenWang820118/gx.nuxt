@@ -48,22 +48,35 @@
         v-if="searchResults && searchInput"
         :key="product.id"
       >
-        <ProductComp :product="product" />
+        <ProductComp
+          :product="product"
+          v-bind="product"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-  const searchInput = useState(() => null);
-  const searchResults = useState(() => null);
-  const { data } = await useFetch('/api/products/search/query', {
+<script setup lang="ts">
+  import { Product } from '../utils/product.interface';
+
+  const searchInput = useState<string>(() => null);
+  const searchResults = useState<Product[]>(() => null);
+  const { data } = await useFetch<Product[]>('/api/products/search/query', {
     immediate: false,
     query: {
       input: searchInput
     },
     transform: (data) => {
-      searchResults.value = data;
+      return data.map((item) => ({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        description: item.description,
+        image: item.image,
+        price: item.price,
+        created_at: item.created_at
+      }));
     }
   });
 </script>

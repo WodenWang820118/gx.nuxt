@@ -5,11 +5,16 @@
       v-if="products"
       :key="product.id"
     >
-      <ProductComp :product="product" />
+      <ProductComp
+        :product="product"
+        v-bind="product"
+      />
     </div>
   </div>
 </template>
 
-<script setup>
-  const { data: products } = await useFetch('/api/products');
+<script setup lang="ts">
+  import { Product } from '../utils/product.interface';
+
+  const { data: products } = await useFetch<Product[]>('/api/products');
 </script>

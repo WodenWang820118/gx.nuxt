@@ -24,5 +24,46 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [nxViteTsPaths()]
+  },
+  modules: [
+    '@nuxt/ui',
+    '@nuxt/icon',
+    '@pinia/nuxt',
+    '@nuxtjs/supabase',
+    '@nuxtjs/tailwindcss'
+  ],
+  runtimeConfig: {
+    stripeSK: process.env.NUXT_STRIPE_SK_KEY,
+    public: {
+      stripePK: process.env.NUXT_STRIPE_PK_KEY
+    }
+  },
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css'
+        }
+      ],
+      script: [
+        {
+          src: 'https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js'
+        },
+        {
+          src: 'https://js.stripe.com/v3',
+          defer: true
+        }
+      ]
+    }
+  },
+  features: {
+    devLogs: false
+  },
+  nitro: {
+    preset: 'vercel',
+    output: {
+      dir: '../../.vercel/output'
+    }
   }
 });

@@ -163,13 +163,13 @@
   </div>
 </template>
 
-<script setup>
-  const user = useSupabaseUser();
+<script setup lang="ts">
+  import { onMounted } from 'vue';
   import { initFlowbite } from 'flowbite';
+  const user = useSupabaseUser();
 
   // initialize components based on data attribute selectors
   onMounted(() => {
     initFlowbite();
   });
-  z;
 </script>
