@@ -1,28 +1,28 @@
-import { PrismaClient } from '@prisma/client';
-import { defineEventHandler, getQuery } from 'h3';
-const prisma = new PrismaClient();
+// import { PrismaClient } from '@prisma/client';
+// import { defineEventHandler, getQuery } from 'h3';
+// const prisma = new PrismaClient();
 
-export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
-  const { title, description, image, category, price } = query ?? {};
+// export default defineEventHandler(async (event) => {
+//   const query = getQuery(event);
+//   const { title, description, image, category, price } = query ?? {};
 
-  let newProduct;
+//   let newProduct;
 
-  try {
-    newProduct = await prisma.products.create({
-      data: {
-        title: String(title || ''),
-        description: String(description || ''),
-        image: String(image || ''),
-        category: String(category || ''),
-        price: Number(price)
-      }
-    });
-  } catch (err) {
-    console.error(err);
-  } finally {
-    await prisma.$disconnect();
-  }
+//   try {
+//     newProduct = await prisma.products.create({
+//       data: {
+//         title: String(title || ''),
+//         description: String(description || ''),
+//         image: String(image || ''),
+//         category: String(category || ''),
+//         price: Number(price)
+//       }
+//     });
+//   } catch (err) {
+//     console.error(err);
+//   } finally {
+//     await prisma.$disconnect();
+//   }
 
-  return newProduct;
-});
+//   return newProduct;
+// });
