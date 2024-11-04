@@ -1,11 +1,4 @@
-const { FlatCompat } = require('@eslint/eslintrc');
-const js = require('@eslint/js');
 const baseConfig = require('../../eslint.config.js');
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended
-});
 
 module.exports = [
   ...baseConfig,
@@ -14,7 +7,6 @@ module.exports = [
     // Override or add rules here
     rules: {}
   },
-  ...compat.extends('@nuxt/eslint-config'),
   {
     files: ['**/*.vue'],
     languageOptions: {

@@ -21,24 +21,24 @@ module.exports = [
   },
   {
     rules: {}
-  },
-  {
-    files: ['**/*.vue'],
-    languageOptions: {
-      parser: vueParser,
-      parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        // If you're using TypeScript in Vue components:
-        parser: require('@typescript-eslint/parser')
-      }
-    },
-    plugins: {
-      vue: eslintPluginVue
-    },
-    rules: {
-      ...eslintPluginVue.configs.recommended.rules,
-      'vue/html-self-closing': 'off'
-    }
   }
+  // {
+  //   files: ['**/*.vue'],
+  //   languageOptions: {
+  //     parser: vueParser,
+  //     parserOptions: {
+  //       ecmaVersion: 'latest',
+  //       sourceType: 'module',
+  //       // If you're using TypeScript in Vue components:
+  //       parser: require('@typescript-eslint/parser')
+  //     }
+  //   },
+  //   plugins: {
+  //     vue: eslintPluginVue
+  //   },
+  //   rules: {
+  //     ...eslintPluginVue.configs.recommended.rules,
+  //     'vue/html-self-closing': 'off'
+  //   }
+  // }
 ];
