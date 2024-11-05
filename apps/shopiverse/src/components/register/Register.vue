@@ -129,4 +129,8 @@
   </div>
 </template>
 
-<script src="./Register.script.ts"></script>
+<script setup lang="ts">
+  import { useRegisterLogic } from './register';
+
+  const { state, signUp, successMsg, errorMsg } = useRegisterLogic();
+</script>

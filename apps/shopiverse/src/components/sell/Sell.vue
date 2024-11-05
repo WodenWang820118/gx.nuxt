@@ -184,4 +184,20 @@
   </div>
 </template>
 
-<script src="./Sell.script.ts"></script>
+<script setup lang="ts">
+  import { useSellLogic } from './sell';
+  const {
+    productTitle,
+    productCategory,
+    productPrice,
+    productDescription,
+    imageUploadSuccessMsg,
+    imageUploadErrorMsg,
+    productCreationSuccessMsg,
+    productCreationErrorMsg,
+    handleFileChange,
+    uploadImage,
+    createProduct,
+    clearEveryThing
+  } = useSellLogic();
+</script>

@@ -21,5 +21,15 @@
   </div>
 </template>
 
-<script src="./Checkout.script.ts"></script>
-<style src="./Checkout.style.scss"></style>
+<script setup lang="ts">
+  import { useCheckoutLogic } from './checkout';
+  const {
+    handleSubmit,
+    paymentRef,
+    submitButtonRef,
+    spinnerRef,
+    buttonTextRef,
+    paymentMessageRef
+  } = useCheckoutLogic();
+</script>
+<style src="./checkout.scss"></style>
