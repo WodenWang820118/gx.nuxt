@@ -129,4 +129,4 @@
   </div>
 </template>
 
-<script setup lang="js" src="./Register.script.ts"></script>
+<script src="./Register.script.ts"></script>

@@ -184,4 +184,4 @@
   </div>
 </template>
 
-<script setup lang="ts" src="./Sell.script.ts"></script>
+<script src="./Sell.script.ts"></script>

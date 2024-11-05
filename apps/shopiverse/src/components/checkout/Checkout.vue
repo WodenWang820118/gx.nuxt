@@ -21,5 +21,5 @@
   </div>
 </template>
 
-<script setup lang="ts" src="./Checkout.script.ts"></script>
+<script src="./Checkout.script.ts"></script>
 <style src="./Checkout.style.scss"></style>
