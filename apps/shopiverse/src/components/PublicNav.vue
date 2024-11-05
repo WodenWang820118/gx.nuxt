@@ -24,7 +24,7 @@
           <button
             id="user-menu-button"
             type="button"
-            class="flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 md:me-0
+            class="flex rounded-full text-sm focus:ring-4 focus:ring-gray-300 md:me-0
               dark:focus:ring-gray-600"
             aria-expanded="false"
             data-dropdown-toggle="user-dropdown"
@@ -32,12 +32,13 @@
           >
             <span class="sr-only">Open user menu</span>
             <img
-              class="h-8 w-8 rounded-full"
               src="/images/avatar.png"
               alt="user photo"
+              width="50"
+              height="50"
+              class="rounded-full"
             />
           </button>
-          <!-- Dropdown menu -->
           <div
             id="user-dropdown"
             class="z-50 my-4 hidden list-none divide-y divide-gray-100 rounded-lg bg-white
@@ -149,7 +150,6 @@
 
 <script setup lang="ts">
   import { onMounted } from 'vue';
-  const user = useSupabaseUser();
   import { initFlowbite } from 'flowbite';
 
   // initialize components based on data attribute selectors

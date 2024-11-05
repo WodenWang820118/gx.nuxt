@@ -38,6 +38,13 @@ export default defineNuxtConfig({
       stripePK: process.env.NUXT_STRIPE_PK_KEY
     }
   },
+  // if not configuring the supabase redirect as false,
+  // users cannot access the app without being authenticated
+  supabase: {
+    url: process.env.NUXT_SUPABASE_URL,
+    key: process.env.NUXT_SUPABASE_KEY,
+    redirect: false
+  },
   app: {
     head: {
       link: [
@@ -66,5 +73,6 @@ export default defineNuxtConfig({
       dir: '../../.vercel/output'
     }
   },
-  compatibilityDate: '2024-11-04'
+  compatibilityDate: '2024-11-04',
+  ssr: false
 });

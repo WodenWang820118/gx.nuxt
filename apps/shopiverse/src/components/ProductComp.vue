@@ -65,7 +65,7 @@
     description: string;
     price: number;
     image: string;
-    product: Product; // Add this prop
+    product: Product;
   }>();
 
   const user = useSupabaseUser();
