@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Products {
-  id      Int       @id @default(autoincrement())
+  id      String       @id @default(uuid())
   title   String
-  description    String
-  image          String
-  category       String
+  description    String?
+  image          String?
+  category       String?
   price          Int
   created_at    DateTime?     @default(now())   @db.Timestamptz(6)
 }

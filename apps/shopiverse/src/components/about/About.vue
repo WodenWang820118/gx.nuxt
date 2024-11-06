@@ -33,4 +33,4 @@
   </div>
 </template>
 
-<style src="./About.style.scss"></style>
+<style src="./about.scss"></style>

@@ -10,6 +10,9 @@
         v-bind="product"
       />
     </div>
+    <div v-else>
+      <p>No products</p>
+    </div>
   </div>
 </template>
 

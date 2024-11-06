@@ -121,6 +121,8 @@ export function useRegisterLogic() {
     state,
     validationErrors,
     successMsg,
-    errorMsg
+    errorMsg,
+    signUp,
+    schema
   };
 }

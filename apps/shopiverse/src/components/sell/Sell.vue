@@ -185,7 +185,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useSellLogic } from './sell';
+  import { useSellLogic } from './sell.script';
   const {
     productTitle,
     productCategory,

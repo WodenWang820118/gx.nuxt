@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useCheckoutLogic } from './checkout';
+  import { useCheckoutLogic } from './checkout.script';
   const {
     handleSubmit,
     paymentRef,

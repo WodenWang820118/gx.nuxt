@@ -130,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-  import { useRegisterLogic } from './register';
+  import { useRegisterLogic } from './register.script';
 
-  const { state, signUp, successMsg, errorMsg } = useRegisterLogic();
+  const { state, successMsg, errorMsg, signUp, schema } = useRegisterLogic();
 </script>

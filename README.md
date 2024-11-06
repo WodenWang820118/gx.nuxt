@@ -33,3 +33,25 @@ pnpm run dev:cinemate
 ```bash
 pnpm run build-cinemate
 ```
+
+## Shopiverse
+
+To add a database, please use the following commands:
+
+```bash
+nx run shopiverse:prisma-generate
+```
+
+```bash
+nx run shopiverse:prisma-migrate
+```
+
+The `migrations` directory will be created and database tables will be created.
+
+After data insertion, run the following command to look into the database:
+
+```bash
+nx run shopiverse:prisma-studio
+```
+
+The Prisma Studio will be opened in the browser with `http://localhost:5555`.

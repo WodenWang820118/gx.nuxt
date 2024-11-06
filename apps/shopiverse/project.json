@@ -25,6 +25,7 @@
     "prisma-migrate": {
       "executor": "@nx-tools/nx-prisma:migrate",
       "options": {
+        "name": "dev",
         "schema": "apps/shopiverse/prisma/schema.prisma"
       }
     },

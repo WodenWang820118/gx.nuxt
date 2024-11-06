@@ -60,9 +60,9 @@
 <script setup lang="ts">
   import { Product } from '../utils/product.interface';
 
-  const searchInput = useState<string>(() => null);
-  const searchResults = useState<Product[]>(() => null);
-  const { data } = await useFetch<Product[]>('/api/products/search/query', {
+  const searchInput = useState<string | null>(() => null);
+  const searchResults = useState<Product[] | null>(() => null);
+  const { data } = await useFetch<Product[]>('/api/products/search', {
     immediate: false,
     query: {
       input: searchInput

@@ -4,7 +4,7 @@
       class="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow
         dark:border-gray-700 dark:bg-gray-800"
     >
-      <NuxtLink :to="`product-${id}`">
+      <NuxtLink :to="`${id}`">
         <img
           class="rounded-t-lg p-8"
           :src="`${image}`"
@@ -12,13 +12,13 @@
         />
       </NuxtLink>
       <div class="px-5 pb-5">
-        <NuxtLink :to="`product-${id}`">
+        <NuxtLink :to="`${id}`">
           <h5
             class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
             >{{ title }}</h5
           >
         </NuxtLink>
-        <NuxtLink :to="`product-${id}`">
+        <NuxtLink :to="`${id}`">
           <p class="mb-3 truncate text-gray-500 dark:text-gray-400">{{
             description
           }}</p>
@@ -60,8 +60,9 @@
   import { useCart } from '../composables/state';
 
   defineProps<{
-    id: number;
+    id: string;
     title: string;
+    category: string;
     description: string;
     price: number;
     image: string;
@@ -70,8 +71,8 @@
 
   const user = useSupabaseUser();
   const cart = useCart();
-  const alreadyInCart = (cartState, productToCheck) => {
-    return cartState.some((productInCart) => {
+  const alreadyInCart = (cartState: Product[], productToCheck: Product) => {
+    return cartState.some((productInCart: Product) => {
       return productInCart.id === productToCheck.id;
     });
   };
@@ -80,7 +81,7 @@
     return Math.floor(Math.random() * 5) + 1;
   };
 
-  const addToCart = (product) => {
+  const addToCart = (product: Product) => {
     if (user.value) {
       cart.value.push(product);
     } else {
