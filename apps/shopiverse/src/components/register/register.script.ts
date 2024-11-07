@@ -83,8 +83,8 @@ export function useRegisterLogic() {
         data: {
           full_name: state.userName,
           address: state.address
-        },
-        emailRedirectTo: 'https://shopiversee.netlify.app/'
+        }
+        // emailRedirectTo: 'https://shopiversee.netlify.app/'
       }
     });
 

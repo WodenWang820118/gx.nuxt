@@ -41,6 +41,7 @@
         class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium
           text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300
           sm:w-auto dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        @click="login"
         >Log In</button
       >
 
@@ -52,6 +53,7 @@
           text-center text-sm font-medium text-white hover:bg-[#24292F]/90
           focus:outline-none focus:ring-4 focus:ring-[#24292F]/50
           dark:hover:bg-[#050708]/30 dark:focus:ring-gray-500"
+        @click="githubLogin"
       >
         <svg
           class="me-2 h-4 w-4"
@@ -75,6 +77,7 @@
           text-center text-sm font-medium text-white hover:bg-[#4285F4]/90
           focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50
           dark:focus:ring-[#4285F4]/55"
+        @click="googleLogin"
       >
         <svg
           class="me-2 h-4 w-4"
@@ -112,74 +115,14 @@
 </template>
 
 <script setup lang="ts">
-  const supabase = useSupabaseClient();
-  const user = useSupabaseUser();
-  const email = useState(() => null);
-  const password = useState(() => null);
-  const successMsg = useState<string>(() => '');
-  const errorMsg = useState<string>(() => '');
-
-  const login = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.value,
-      password: password.value
-    });
-
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
-    }
-
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      // await navigateTo('/');
-    }, 2000);
-  };
-
-  const githubLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github'
-    });
-
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
-    }
-
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      // await navigateTo('/');
-    }, 2000);
-  };
-
-  const googleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google'
-    });
-
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
-    }
-
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
-  };
-
-  onMounted(() => {
-    if (user.value) {
-      // navigateTo('/');
-    }
-  });
+  import { useLoginLogic } from './login.script';
+  const {
+    email,
+    password,
+    successMsg,
+    errorMsg,
+    login,
+    githubLogin,
+    googleLogin
+  } = useLoginLogic();
 </script>
