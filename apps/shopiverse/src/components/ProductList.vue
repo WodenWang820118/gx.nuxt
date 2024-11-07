@@ -18,6 +18,10 @@
 
 <script setup lang="ts">
   import { Product } from '../utils/product.interface';
+  const products = ref<Product[]>([]);
 
-  const { data: products } = await useFetch<Product[]>('/api/products');
+  onMounted(async () => {
+    const res = await $fetch<Product[]>('/api/products');
+    products.value = res;
+  });
 </script>

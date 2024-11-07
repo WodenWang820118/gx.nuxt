@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const productID = getRouterParam(event, 'id');
-
   if (!productID) {
     throw createError({
       statusCode: 400,

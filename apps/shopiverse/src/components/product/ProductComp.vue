@@ -4,21 +4,21 @@
       class="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow
         dark:border-gray-700 dark:bg-gray-800"
     >
-      <NuxtLink :to="`${id}`">
+      <NuxtLink :to="`/products/${id}`">
         <img
           class="rounded-t-lg p-8"
-          :src="`${image}`"
+          :src="`${image ? image : '/images/placeholder.png'}`"
           alt="product image"
         />
       </NuxtLink>
       <div class="px-5 pb-5">
-        <NuxtLink :to="`${id}`">
+        <NuxtLink :to="`/products/${id}`">
           <h5
             class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
             >{{ title }}</h5
           >
         </NuxtLink>
-        <NuxtLink :to="`${id}`">
+        <NuxtLink :to="`/products/${id}`">
           <p class="mb-3 truncate text-gray-500 dark:text-gray-400">{{
             description
           }}</p>
@@ -33,12 +33,12 @@
         </div>
         <div class="flex items-center justify-between">
           <span class="text-3xl font-bold text-gray-900 dark:text-white">{{
-            price
+            price + 100
           }}</span>
 
           <span
             class="text-3xl font-bold text-gray-900 line-through dark:text-white"
-            >{{ price * 2 }}</span
+            >{{ (price + 100) * 2 }}</span
           >
           <button
             class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white
@@ -56,8 +56,9 @@
 </template>
 
 <script setup lang="ts">
-  import { Product } from '../utils/product.interface';
-  import { useCart } from '../composables/state';
+  import { Product } from '../../utils/product.interface';
+  import { useCart } from '../../composables/state';
+  import { useProductLogic } from './product.script';
 
   defineProps<{
     id: string;
@@ -71,21 +72,5 @@
 
   const user = useSupabaseUser();
   const cart = useCart();
-  const alreadyInCart = (cartState: Product[], productToCheck: Product) => {
-    return cartState.some((productInCart: Product) => {
-      return productInCart.id === productToCheck.id;
-    });
-  };
-
-  const getRandomRating = () => {
-    return Math.floor(Math.random() * 5) + 1;
-  };
-
-  const addToCart = (product: Product) => {
-    if (user.value) {
-      cart.value.push(product);
-    } else {
-      alert('Log in to start adding products to cart');
-    }
-  };
+  const { addToCart, alreadyInCart, getRandomRating } = useProductLogic();
 </script>
