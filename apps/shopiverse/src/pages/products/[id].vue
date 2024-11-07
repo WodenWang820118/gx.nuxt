@@ -25,10 +25,7 @@
   const product = ref<Product>(null);
 
   onMounted(async () => {
-    const res = await useFetch<Product>(
-      `/api/products/find-product-by-id/${id}`
-    );
-    console.log('res.data.value: ', res.data.value);
-    product.value = res.data.value;
+    const res = await $fetch<Product>(`/api/products/find-product-by-id/${id}`);
+    product.value = res;
   });
 </script>
