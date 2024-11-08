@@ -1,14 +1,10 @@
 <template>
-  <div>
-    <div
-      class="flex h-56 w-56 items-center justify-center rounded-lg border border-gray-200
-        bg-gray-50 dark:border-gray-700 dark:bg-gray-800"
-    >
+  <div class="flex min-h-[400px] items-center justify-center">
+    <div class="flex flex-col items-center gap-4">
       <div
-        class="animate-pulse rounded-full bg-blue-200 px-3 py-1 text-center text-xs font-medium
-          leading-none text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-        >loading...</div
-      >
+        class="h-12 w-12 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500"
+      ></div>
+      <p class="text-lg font-medium text-gray-500">Loading...</p>
     </div>
   </div>
 </template>

@@ -49,8 +49,8 @@
 <script setup lang="ts">
   const supabase = useSupabaseClient();
   const user = useSupabaseUser();
-  const successMsg = useState(() => null);
-  const errorMsg = useState(() => null);
+  const successMsg = useState<string | null>(() => null);
+  const errorMsg = useState<string | null>(() => null);
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -63,7 +63,7 @@
     successMsg.value = 'Hope to see you again soon, Redirecting...';
     setTimeout(async () => {
       successMsg.value = null;
-      // await navigateTo('/');
+      await navigateTo('/');
     }, 2000);
   };
 

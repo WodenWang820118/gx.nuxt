@@ -96,31 +96,11 @@
                   text-white transition hover:bg-blue-800 focus:outline-none focus:ring-4
                   focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700
                   dark:focus:ring-blue-800"
-                @click="addToCart(product)"
+                @click="addToCart({ ...product, quantity: 1 })"
               >
                 <span v-if="alreadyInCart(product) && user">Item Added</span>
                 <span v-else>Add to Cart</span>
               </button>
-            </div>
-
-            <!-- Additional Details -->
-            <div
-              class="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700"
-            >
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white"
-                >Product Details</h3
-              >
-              <div class="mt-4 space-y-3">
-                <p class="text-gray-600 dark:text-gray-300">
-                  • Free Delivery Available
-                </p>
-                <p class="text-gray-600 dark:text-gray-300">
-                  • 30-Day Return Policy
-                </p>
-                <p class="text-gray-600 dark:text-gray-300">
-                  • 1 Year Warranty
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -130,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-  import { CartItem } from '../../utils/product.interface';
+  import { CartItem, Product } from '../../utils/product.interface';
   import { useProductLogic } from './product.script';
 
   defineProps<{
@@ -140,7 +120,7 @@
     description: string;
     price: number;
     image: string;
-    product: CartItem;
+    product: Product;
   }>();
 
   const user = useSupabaseUser();

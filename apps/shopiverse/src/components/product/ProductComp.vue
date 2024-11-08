@@ -1,63 +1,60 @@
 <template>
-  <div :id="`productcomp${id}`">
-    <div
-      class="w-full max-w-sm rounded-lg border border-gray-200 bg-white shadow
-        dark:border-gray-700 dark:bg-gray-800"
-    >
+  <UCard :id="`productcomp${id}`">
+    <!-- Card Header with Image -->
+    <template #header>
       <NuxtLink :to="`/products/${id}`">
         <img
-          class="rounded-t-lg p-8"
-          :src="`${image ? image : '/images/placeholder.png'}`"
+          class="w-full rounded-t-lg object-cover"
+          :src="image || '/images/placeholder.png'"
           alt="product image"
         />
       </NuxtLink>
-      <div class="px-5 pb-5">
-        <NuxtLink :to="`/products/${id}`">
-          <h5
-            class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
-            >{{ title }}</h5
-          >
-        </NuxtLink>
-        <NuxtLink :to="`/products/${id}`">
-          <p class="mb-3 truncate text-gray-500 dark:text-gray-400">{{
-            description
-          }}</p>
-        </NuxtLink>
-        <div class="mb-5 mt-2.5 flex items-center">
-          <h5>Rating: </h5>
-          <span
-            class="ms-3 rounded bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800
-              dark:bg-blue-200 dark:text-blue-800"
-            >{{ getRandomRating() }}</span
-          >
-        </div>
-        <div class="flex items-center justify-between">
-          <span class="text-3xl font-bold text-gray-900 dark:text-white">{{
-            price + 100
-          }}</span>
+    </template>
 
-          <span
-            class="text-3xl font-bold text-gray-900 line-through dark:text-white"
-            >{{ (price + 100) * 2 }}</span
-          >
-          <button
-            class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white
-              hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300
-              dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            @click="addToCart(product)"
-          >
-            <span v-if="alreadyInCart(product) && user">Item Added</span>
-            <span v-else>Add to Cart</span>
-          </button>
-        </div>
+    <!-- Card Body -->
+    <template #default>
+      <NuxtLink :to="`/products/${id}`">
+        <h5 class="text-xl font-semibold">{{ title }}</h5>
+      </NuxtLink>
+      <NuxtLink :to="`/products/${id}`">
+        <p class="mb-3 truncate text-gray-500">{{ description }}</p>
+      </NuxtLink>
+      <div class="mb-5 mt-2.5 flex items-center">
+        <h5>Rating: </h5>
+        <span
+          class="ms-3 rounded bg-blue-100 px-2.5 py-0.5 text-xs font-semibold text-blue-800"
+        >
+          {{ getRandomRating() }}
+        </span>
       </div>
-    </div>
-  </div>
+    </template>
+
+    <!-- Card Footer -->
+    <template #footer>
+      <div class="flex items-center justify-between">
+        <span class="text-3xl font-bold">{{ price + 100 }}</span>
+        <span class="text-3xl font-bold line-through">
+          {{ (price + 100) * 2 }}
+        </span>
+        <UButton
+          color="primary"
+          @click="
+            addToCart({
+              ...product,
+              quantity: 1
+            })
+          "
+        >
+          <span v-if="alreadyInCart(product) && user">Item Added</span>
+          <span v-else>Add to Cart</span>
+        </UButton>
+      </div>
+    </template>
+  </UCard>
 </template>
 
 <script setup lang="ts">
-  import { CartItem } from '../../utils/product.interface';
-  import { useCart } from '../../composables/state';
+  import { Product } from '../../utils/product.interface';
   import { useProductLogic } from './product.script';
 
   defineProps<{
@@ -67,10 +64,9 @@
     description: string;
     price: number;
     image: string;
-    product: CartItem;
+    product: Product;
   }>();
 
   const user = useSupabaseUser();
-  const cart = useCart();
   const { addToCart, alreadyInCart, getRandomRating } = useProductLogic();
 </script>

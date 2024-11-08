@@ -1,6 +1,6 @@
 <template>
   <main class="flex min-h-screen flex-col bg-white dark:bg-gray-800">
-    <Header />
+    <Navigation />
     <br />
     <NuxtLayout>
       <NuxtPage />
