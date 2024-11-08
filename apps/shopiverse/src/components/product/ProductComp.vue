@@ -46,7 +46,7 @@
               dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             @click="addToCart(product)"
           >
-            <span v-if="alreadyInCart(cart, product) && user">Item Added</span>
+            <span v-if="alreadyInCart(product) && user">Item Added</span>
             <span v-else>Add to Cart</span>
           </button>
         </div>
@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Product } from '../../utils/product.interface';
+  import { CartItem } from '../../utils/product.interface';
   import { useCart } from '../../composables/state';
   import { useProductLogic } from './product.script';
 
@@ -67,7 +67,7 @@
     description: string;
     price: number;
     image: string;
-    product: Product;
+    product: CartItem;
   }>();
 
   const user = useSupabaseUser();

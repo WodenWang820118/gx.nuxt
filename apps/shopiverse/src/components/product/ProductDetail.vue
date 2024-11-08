@@ -98,9 +98,7 @@
                   dark:focus:ring-blue-800"
                 @click="addToCart(product)"
               >
-                <span v-if="alreadyInCart(cart, product) && user"
-                  >Item Added</span
-                >
+                <span v-if="alreadyInCart(product) && user">Item Added</span>
                 <span v-else>Add to Cart</span>
               </button>
             </div>
@@ -132,8 +130,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Product } from '../../utils/product.interface';
-  import { useCart } from '../../composables/state';
+  import { CartItem } from '../../utils/product.interface';
   import { useProductLogic } from './product.script';
 
   defineProps<{
@@ -143,10 +140,9 @@
     description: string;
     price: number;
     image: string;
-    product: Product;
+    product: CartItem;
   }>();
 
   const user = useSupabaseUser();
-  const cart = useCart();
-  const { getRandomRating, addToCart, alreadyInCart } = useProductLogic();
+  const { getRandomRating, addToCart, alreadyInCart, cart } = useProductLogic();
 </script>

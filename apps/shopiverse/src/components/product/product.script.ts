@@ -1,14 +1,12 @@
-import { Product } from '../../utils/product.interface';
+import { Product, CartItem } from '../../utils/product.interface';
 
 export function useProductLogic() {
-  const route = useRoute();
-  const id = route.params.id;
   const product = ref<Product | null>(null);
   const user = useSupabaseUser();
-  const cart = useCart();
+  const { cart } = useCart();
 
-  const alreadyInCart = (cartState: Product[], productToCheck: Product) => {
-    return cartState.some((productInCart: Product) => {
+  const alreadyInCart = (productToCheck: Product) => {
+    return cart.value.some((productInCart: CartItem) => {
       return productInCart.id === productToCheck.id;
     });
   };
@@ -17,9 +15,12 @@ export function useProductLogic() {
     return Math.floor(Math.random() * 5) + 1;
   };
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: CartItem) => {
     if (user.value) {
-      cart.value.push(product);
+      cart.value.push({
+        ...product,
+        quantity: 1
+      });
     } else {
       alert('Log in to start adding products to cart');
     }
@@ -29,6 +30,7 @@ export function useProductLogic() {
     product,
     getRandomRating,
     addToCart,
-    alreadyInCart
+    alreadyInCart,
+    cart
   };
 }
