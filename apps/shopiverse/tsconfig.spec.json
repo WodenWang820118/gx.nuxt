@@ -2,15 +2,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": [
-      "vitest/globals",
-      "vitest/importMeta",
-      "vite/client",
-      "node",
-      "vitest"
-    ],
-    "composite": true,
-    "declaration": true
+    "declaration": true,
+    "types": ["vitest/globals", "vitest/importMeta", "vite/client", "node"],
+    "composite": true
   },
   "include": [
     ".nuxt/nuxt.d.ts",

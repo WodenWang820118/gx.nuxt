@@ -1,19 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/out-tsc",
-    "types": [
-      "vitest/globals",
-      "vitest/importMeta",
-      "vite/client",
-      "node",
-      "vitest"
-    ],
+    "target": "esnext",
     "composite": true,
     "declaration": true
   },
-  "include": [
-    ".nuxt/nuxt.d.ts",
+  "include": [".nuxt/nuxt.d.ts", "src/**/*", "src/prisma"],
+  "exclude": [
     "vite.config.ts",
     "vitest.config.ts",
     "src/**/*.test.ts",
@@ -23,7 +16,6 @@
     "src/**/*.test.js",
     "src/**/*.spec.js",
     "src/**/*.test.jsx",
-    "src/**/*.spec.jsx",
-    "src/**/*.d.ts"
+    "src/**/*.spec.jsx"
   ]
 }
