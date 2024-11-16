@@ -1,0 +1,3 @@
+<template>
+  <Sell />
+</template>
