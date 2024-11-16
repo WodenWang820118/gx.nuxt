@@ -5,7 +5,7 @@ export interface Product {
   image: string;
   category: string;
   price: number;
-  created_at: string;
+  created_at?: string;
 }
 
 export interface CartItem extends Product {

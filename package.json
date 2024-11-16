@@ -8,7 +8,8 @@
     "build-cinemate": "nx build cinemate --prod",
     "dev:shopiverse": "nx serve shopiverse",
     "format-shopiverse": "nx format:write --projects=shopiverse --skip-nx-cache",
-    "build-shopiverse": "nx build shopiverse --prod"
+    "build-shopiverse": "nx build shopiverse --prod",
+    "dev:nuxt-jwt": "nx serve nuxt-jwt"
   },
   "private": true,
   "devDependencies": {
@@ -37,6 +38,7 @@
     "@swc-node/register": "1.10.9",
     "@swc/core": "1.8.0",
     "@swc/helpers": "~0.5.11",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.8.4",
     "@vitejs/plugin-vue": "^5.1.4",
     "@vitest/coverage-v8": "^2.1.4",
@@ -77,6 +79,7 @@
     "@pinia/nuxt": "0.5.5",
     "@prisma/client": "^5.21.1",
     "flowbite": "^2.5.2",
+    "jsonwebtoken": "^9.0.2",
     "pinia": "^2.2.5",
     "uuid": "^11.0.2"
   },

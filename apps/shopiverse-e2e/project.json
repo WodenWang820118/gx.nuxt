@@ -1,8 +1,0 @@
-{
-  "name": "shopiverse-e2e",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/shopiverse-e2e/src",
-  "implicitDependencies": ["shopiverse"],
-  "// targets": "to see all targets run: nx show project shopiverse-e2e --web",
-  "targets": {}
-}

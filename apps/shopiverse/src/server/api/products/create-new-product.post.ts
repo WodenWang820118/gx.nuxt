@@ -1,10 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { defineEventHandler, readBody } from 'h3';
-const prisma = new PrismaClient();
+import { serverSupabaseClient } from '#supabase/server';
+import { Product } from '~/utils/product.interface';
 
 export default defineEventHandler(async (event) => {
+  const prisma = new PrismaClient();
+  // TODO: enable RLS to let users create products after authentication
+  // product should be having a user_id column as a foreign key
+  const supabase = await serverSupabaseClient<Product>(event);
   try {
-    // Read the request body instead of query params
     const body = await readBody(event);
 
     // Extract actual values from the complex objects
@@ -20,18 +24,35 @@ export default defineEventHandler(async (event) => {
       return obj?._value || obj;
     };
 
-    const newProduct = await prisma.products.create({
-      data: {
-        id: String(extractValue(body.id) || crypto.randomUUID()),
-        title: String(extractValue(body.title) || ''),
-        description: String(extractValue(body.description) || ''),
-        image: String(extractValue(body.image) || ''),
-        category: String(extractValue(body.category) || ''),
-        price: parseInt(extractValue(body.price) || '0', 10)
-      }
+    // Prepare the product data
+    const productData: Product = {
+      id: String(extractValue(body.id) || crypto.randomUUID()),
+      title: String(extractValue(body.title) || ''),
+      description: String(extractValue(body.description) || ''),
+      image: String(extractValue(body.image) || ''),
+      category: String(extractValue(body.category) || ''),
+      price: parseInt(extractValue(body.price) || '0', 10)
+    };
+
+    // First, save to Supabase (source of truth)
+    const { data, error } = await supabase
+      .from('Products')
+      .insert(productData)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Then, cache in Prisma
+    const prismaProduct = await prisma.products.create({
+      data: productData
     });
 
-    return { success: true, data: newProduct };
+    return {
+      success: true,
+      data: data,
+      cached: prismaProduct
+    };
   } catch (err) {
     console.error('Error creating product:', err);
     return {

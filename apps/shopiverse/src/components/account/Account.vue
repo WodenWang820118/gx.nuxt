@@ -27,6 +27,7 @@
                 >Email</label
               >
               <input
+                v-model="userEmail"
                 type="email"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
                   focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -41,6 +42,7 @@
                 >Full Name</label
               >
               <input
+                v-model="userName"
                 type="text"
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500
                   focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -143,4 +145,16 @@
     </div>
   </div>
 </template>
-<script steup lang="ts"></script>
+<script setup lang="ts">
+  import { ref, onMounted, Ref } from 'vue';
+  const userName = ref('');
+  const userEmail = ref('');
+  const user = useSupabaseUser();
+
+  onMounted(() => {
+    if (user.value) {
+      userName.value = user.value.user_metadata.full_name;
+      userEmail.value = user.value.email;
+    }
+  });
+</script>
