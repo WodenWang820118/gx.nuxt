@@ -26,28 +26,16 @@ export function useLoginLogic() {
     }, 2000);
   };
 
-  const githubLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github'
-    });
-
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
-    }
-
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
-  };
-
   const googleLogin = async () => {
+    // TODO: google login
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google'
+      provider: 'google',
+      options: {
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
+      }
     });
 
     if (error) {
@@ -76,7 +64,6 @@ export function useLoginLogic() {
     successMsg,
     errorMsg,
     login,
-    githubLogin,
     googleLogin
   };
 }

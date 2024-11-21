@@ -65,6 +65,15 @@ export function useRegisterLogic() {
     }
   };
 
+  const getRedirectUrl = () => {
+    const redirectUrl =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:4200'
+        : 'https://gx-nuxt-shopiverse.vercel.app';
+
+    return `${redirectUrl}`;
+  };
+
   const signUp = async () => {
     // Clear previous messages
     successMsg.value = '';
@@ -83,8 +92,8 @@ export function useRegisterLogic() {
         data: {
           full_name: state.userName,
           address: state.address
-        }
-        // emailRedirectTo: 'https://shopiversee.netlify.app/'
+        },
+        emailRedirectTo: getRedirectUrl()
       }
     });
 

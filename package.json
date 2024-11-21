@@ -6,7 +6,7 @@
     "dev:cinemate": "nx serve cinemate",
     "format-cinemate": "nx format:write --projects=cinemate --skip-nx-cache",
     "build-cinemate": "nx build cinemate --prod",
-    "dev:shopiverse": "nx serve shopiverse",
+    "dev:shopiverse": "cross-env-shell NODE_ENV=development \"nx serve shopiverse\"",
     "format-shopiverse": "nx format:write --projects=shopiverse --skip-nx-cache",
     "build-shopiverse": "nx build shopiverse --prod",
     "dev:nuxt-jwt": "nx serve nuxt-jwt"
