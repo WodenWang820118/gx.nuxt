@@ -73,6 +73,5 @@ export default defineNuxtConfig({
       dir: '../../.vercel/output'
     }
   },
-  compatibilityDate: '2024-11-04',
-  ssr: false
+  compatibilityDate: '2024-11-04'
 });

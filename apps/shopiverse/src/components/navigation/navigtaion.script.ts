@@ -46,19 +46,22 @@ export function usePublicNav() {
         to: '/',
         isLogo: true
       },
-      // Main navigation section
-      {
-        label: 'Sell on Shopiverse',
-        icon: 'i-heroicons-shopping-bag',
-        to: '/sell'
-      },
+      ...(user.value
+        ? [
+            {
+              label: 'Sell on Shopiverse',
+              icon: 'i-heroicons-shopping-bag',
+              to: '/sell'
+            }
+          ]
+        : [])
+    ],
+    [
       {
         label: 'About',
         icon: 'i-heroicons-information-circle',
         to: '/about'
-      }
-    ],
-    [
+      },
       {
         label: 'Cart',
         icon: 'i-heroicons-shopping-cart',
@@ -67,7 +70,7 @@ export function usePublicNav() {
       {
         label: 'Profile',
         icon: 'i-heroicons-user-circle',
-        isProfile: true // Add this flag to identify the profile item
+        isProfile: true
       }
     ]
   ];
