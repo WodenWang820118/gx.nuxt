@@ -64,13 +64,15 @@ export function useSellLogic() {
 
   const createProduct = async () => {
     try {
-      const newProduct = {
+      const newProduct: Product = {
         id: uuidv4(),
+        user_id: user.id as string,
         title: productTitle.value,
         description: productDescription.value,
         image: imageUrl.value,
         category: productCategory.value,
-        price: Number(productPrice.value)
+        price: Number(productPrice.value),
+        quantity: 1
       };
 
       const res = await $fetch<{

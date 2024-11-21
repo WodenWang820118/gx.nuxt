@@ -90,7 +90,7 @@ CREATE TABLE products (
 
 ### Order and OrderItems
 
-Orders table:
+`orders` table:
 
 ```sql
 CREATE TABLE orders (
@@ -108,7 +108,7 @@ CREATE TABLE orders (
 );
 ```
 
-OrderItems table:
+`order_items` table:
 
 ```sql
 CREATE TABLE order_items (

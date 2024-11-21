@@ -1,4 +1,4 @@
-import { Product, CartItem } from '../../utils/product.interface';
+import { Product } from '../../utils/product.interface';
 
 export function useProductLogic() {
   const product = ref<Product | null>(null);
@@ -6,7 +6,7 @@ export function useProductLogic() {
   const { cart } = useCart();
 
   const alreadyInCart = (productToCheck: Product) => {
-    return cart.value.some((productInCart: CartItem) => {
+    return cart.value.some((productInCart: Product) => {
       return productInCart.id === productToCheck.id;
     });
   };
@@ -15,11 +15,12 @@ export function useProductLogic() {
     return Math.floor(Math.random() * 5) + 1;
   };
 
-  const addToCart = (product: CartItem) => {
+  const addToCart = (product: Product) => {
     if (user.value) {
+      const item = cart.value.find((item) => item.id === product.id);
       cart.value.push({
         ...product,
-        quantity: 1
+        quantity: item ? item.quantity + 1 : 1
       });
     } else {
       alert('Log in to start adding products to cart');
