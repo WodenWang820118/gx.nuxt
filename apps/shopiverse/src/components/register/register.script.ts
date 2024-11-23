@@ -120,12 +120,6 @@ export function useRegisterLogic() {
     { deep: true }
   );
 
-  onMounted(() => {
-    if (user.value) {
-      // await navigateTo('/');
-    }
-  });
-
   return {
     state,
     validationErrors,

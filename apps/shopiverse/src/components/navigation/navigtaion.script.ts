@@ -1,10 +1,13 @@
+import { useAuthStore } from '../../stores/auth';
+
 export function usePublicNav() {
-  const isAuthenticated = ref(false);
-  const user = useSupabaseUser();
   const supabase = useSupabaseClient();
+  const authStore = useAuthStore();
+  const isAuthenticated = computed(() => authStore.user !== null);
 
   const profileMenuItems = computed(() => {
-    if (!user.value) {
+    console.log('isAuthenticated.value: ', isAuthenticated.value);
+    if (!isAuthenticated.value) {
       return [
         [
           {
@@ -77,14 +80,9 @@ export function usePublicNav() {
     ]
   ]);
 
-  // Update watch to use immediate and handle user changes properly
-  watch(
-    () => user.value,
-    (newUser) => {
-      isAuthenticated.value = !!newUser;
-    },
-    { immediate: true }
-  );
+  onMounted(async () => {
+    await authStore.initialize();
+  });
 
   return {
     isAuthenticated,

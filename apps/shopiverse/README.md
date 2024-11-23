@@ -1,5 +1,8 @@
 # Shopiverse
 
+// TODO: Supabase sync with Prisma
+// TODO: The Google authentication cannot be passed to the application
+
 ## Table of contents
 
 - [Prisma](#prisma)
@@ -132,5 +135,3 @@ CREATE TABLE order_items (
 ```
 
 ### Checkout and Payment
-
-- TODO: checkout, and payment functionality.
