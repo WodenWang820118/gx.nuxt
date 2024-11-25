@@ -6,7 +6,7 @@ export function useCartLogic() {
   const calcTotalCart = () => {
     let total = 0;
     cart.value.forEach((product: Product) => {
-      total += product.price;
+      total += product.price * product.quantity;
     });
 
     return total;
@@ -17,7 +17,7 @@ export function useCartLogic() {
     cart.value.splice(productIndex, 1);
   };
 
-  const decreaseQuantity = (product: CartItem) => {
+  const decreaseQuantity = (product: Product) => {
     const item = cart.value.findIndex((item) => item.id === product.id);
     if (cart.value[item].quantity > 1) {
       cart.value[item].quantity--;
@@ -26,7 +26,7 @@ export function useCartLogic() {
     }
   };
 
-  const increaseQuantity = (product: CartItem) => {
+  const increaseQuantity = (product: Product) => {
     console.log('product: ', product);
     const item = cart.value.findIndex((item) => item.id === product.id);
     console.log('item: ', item);

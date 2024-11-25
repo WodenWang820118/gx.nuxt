@@ -30,20 +30,23 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@pinia/nuxt',
     '@nuxtjs/supabase',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    'nuxt-security'
   ],
-  runtimeConfig: {
-    stripeSK: process.env.NUXT_STRIPE_SK_KEY,
-    public: {
-      stripePK: process.env.NUXT_STRIPE_PK_KEY
-    }
-  },
   // if not configuring the supabase redirect as false,
   // users cannot access the app without being authenticated
   supabase: {
     url: process.env.NUXT_SUPABASE_URL,
     key: process.env.NUXT_SUPABASE_KEY,
     redirect: false
+  },
+  // TODO: cross origin opener google athentication
+  security: {
+    headers: {
+      crossOriginResourcePolicy: 'cross-origin',
+      crossOriginOpenerPolicy: 'same-origin-allow-popups',
+      referrerPolicy: 'strict-origin-when-cross-origin'
+    }
   },
   app: {
     head: {
@@ -60,6 +63,11 @@ export default defineNuxtConfig({
         {
           src: 'https://js.stripe.com/v3',
           defer: true
+        },
+        {
+          src: 'https://accounts.google.com/gsi/client',
+          async: true,
+          defer: true
         }
       ]
     }
@@ -74,5 +82,14 @@ export default defineNuxtConfig({
     }
   },
   compatibilityDate: '2024-11-04',
-  ssr: false
+  runtimeConfig: {
+    public: {
+      loginUri:
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:4200'
+          : 'https://gx-nuxt-shopiverse.vercel.app',
+      googleClientId:
+        '312492860184-lrraqf5544cq3vjc915booficli8ilp3.apps.googleusercontent.com'
+    }
+  }
 });

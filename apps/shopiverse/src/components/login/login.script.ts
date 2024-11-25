@@ -1,74 +1,52 @@
+import { useAuthStore } from '../../stores/auth';
+import { AuthService } from '../../services/AuthService';
+import { GoogleSignInResponse } from '../../utils/google.interface';
+
 export function useLoginLogic() {
-  const supabase = useSupabaseClient();
-  const user = useSupabaseUser();
-  const email = useState(() => null);
-  const password = useState(() => null);
-  const successMsg = useState<string>(() => '');
-  const errorMsg = useState<string>(() => '');
+  const authStore = useAuthStore();
+  const authService = new AuthService();
+  const email = useState<string | null>(() => null);
+  const password = useState<string | null>(() => null);
+  const successMsg = useState<string | null>(() => null);
+  const errorMsg = useState<string | null>(() => null);
 
   const login = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.value,
-      password: password.value
-    });
-
-    if (error) {
+    const res = await authService.login(email.value, password.value);
+    if (res.error) {
       successMsg.value = null;
-      errorMsg.value = error.message;
+      errorMsg.value = res.error.message;
       return;
     }
-
+    console.log('User signed in');
+    console.log('User: ', res.data?.user);
+    authStore.setUser(res.data?.user || null);
     errorMsg.value = null;
     successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
   };
 
-  const githubLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github'
-    });
-
-    if (error) {
+  const handleSignInWithGoogle = async (response: GoogleSignInResponse) => {
+    const res = await authService.handleSignInWithGoogle(response);
+    if (res.error) {
       successMsg.value = null;
-      errorMsg.value = error.message;
+      errorMsg.value = res.error.message;
       return;
     }
-
+    console.log('data: ', res.data);
+    authStore.setUser(res.data.user);
     errorMsg.value = null;
     successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
   };
 
-  const googleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google'
-    });
-
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
+  watch(
+    () => authStore.user,
+    (user) => {
+      if (user) {
+        console.log('User signed in');
+        console.log('User: ', user);
+        navigateTo('/');
+      }
     }
-
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
-  };
-
-  onMounted(() => {
-    if (user.value) {
-      navigateTo('/');
-    }
-  });
+  );
 
   return {
     email,
@@ -76,7 +54,6 @@ export function useLoginLogic() {
     successMsg,
     errorMsg,
     login,
-    githubLogin,
-    googleLogin
+    handleSignInWithGoogle
   };
 }
