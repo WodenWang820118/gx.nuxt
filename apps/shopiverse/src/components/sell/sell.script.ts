@@ -66,7 +66,7 @@ export function useSellLogic() {
     try {
       const newProduct: Product = {
         id: uuidv4(),
-        user_id: user.id as string,
+        user_id: user.value.id as string,
         title: productTitle.value,
         description: productDescription.value,
         image: imageUrl.value,

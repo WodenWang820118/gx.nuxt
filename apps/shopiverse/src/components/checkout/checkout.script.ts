@@ -39,6 +39,8 @@ export function useCheckoutLogic() {
         price: item.price
       }));
 
+      console.log('Checkout items:', checkoutItems);
+
       // Process checkout using CheckoutService
       const order = await checkoutService.processCheckout(
         user.value.id,

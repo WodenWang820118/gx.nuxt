@@ -1,8 +1,5 @@
 # Shopiverse
 
-// TODO: Supabase sync with Prisma
-// TODO: The Google authentication cannot be passed to the application
-
 ## Table of contents
 
 - [Prisma](#prisma)
@@ -75,6 +72,7 @@ CREATE TRIGGER on_auth_user_created
 ```sql
 CREATE TABLE products (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES public.users(id),
     title TEXT NOT NULL,
     description TEXT,
     category TEXT,
@@ -98,7 +96,7 @@ CREATE TABLE products (
 ```sql
 CREATE TABLE orders (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES auth.users(id),
+    user_id UUID REFERENCES public.users(id),
     status TEXT DEFAULT 'pending',
     total_amount DECIMAL(10,2),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
@@ -135,3 +133,10 @@ CREATE TABLE order_items (
 ```
 
 ### Checkout and Payment
+
+### to-do
+
+- TODO: Supabase sync with Prisma
+- TODO: The Google authentication cannot be passed to the application
+- TODO: After purchasing, the product quantity should be updated; if the quantity is 0, the product should be removed from `products` table
+- TODO: Add the stock quantity on the frontend

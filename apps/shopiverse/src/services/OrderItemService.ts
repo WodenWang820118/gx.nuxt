@@ -1,5 +1,5 @@
 import { OrderItem } from '../utils/product.interface';
-
+import { v4 as uuidv4 } from 'uuid';
 export class OrderItemService {
   private supabase = useSupabaseClient();
 
@@ -11,11 +11,13 @@ export class OrderItemService {
       price: number;
     }>
   ): Promise<OrderItem[]> {
-    const orderItems = items.map((item) => ({
+    const orderItems: OrderItem[] = items.map((item) => ({
+      id: uuidv4(),
       order_id: orderId,
       product_id: item.product_id,
       quantity: item.quantity,
-      price: item.price
+      unit_price: item.price,
+      subtotal: item.price * item.quantity
     }));
 
     const { data, error } = await this.supabase

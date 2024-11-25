@@ -17,11 +17,11 @@ export class ProductService {
   async checkStock(productId: string, quantity: number): Promise<boolean> {
     const { data, error } = await this.supabase
       .from('products')
-      .select('stock')
+      .select('quantity')
       .eq('id', productId)
       .single();
 
     if (error) throw error;
-    return data.stock >= quantity;
+    return data.quantity >= quantity;
   }
 }

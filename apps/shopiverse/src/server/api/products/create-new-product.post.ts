@@ -36,9 +36,11 @@ export default defineEventHandler(async (event) => {
       quantity: parseInt(extractValue(body.quantity) || '0', 10)
     };
 
+    console.log('Creating product:', productData);
+
     // First, save to Supabase (source of truth)
     const { data, error } = await supabase
-      .from('Products')
+      .from('products')
       .insert(productData)
       .select()
       .single();

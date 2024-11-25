@@ -6,7 +6,7 @@ export function useCartLogic() {
   const calcTotalCart = () => {
     let total = 0;
     cart.value.forEach((product: Product) => {
-      total += product.price;
+      total += product.price * product.quantity;
     });
 
     return total;
