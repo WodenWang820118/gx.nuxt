@@ -4,8 +4,8 @@ This is a portfolio repository regarding [Nuxt 3](https://nuxt.com/), based on t
 
 ## Table of Contents
 
-- [Cinemate](#cinemate)
-- [Shopiverse](#shopiverse)
-- [Nuxt JWT](#nuxt-jwt)
+- [Cinemate](./apps/cinemate/README.md)
+- [Shopiverse](./apps/shopiverse/README.md)
+- [Nuxt JWT](./apps/nuxt-jwt/README.md)
 
 Please follow the `README.md` file in each project for more information.
