@@ -1,111 +1,80 @@
 import { ref, onMounted } from 'vue';
 import { useCart } from '../../composables/state';
+import { CheckoutService } from '../../services/CheckoutService';
 
 export function useCheckoutLogic() {
-  const config = useRuntimeConfig();
-  const { stripePK } = config.public;
-  let stripe;
-  let elements;
-  let clientSecret;
-
-  // Template refs
   const paymentRef = ref(null);
   const submitButtonRef = ref(null);
   const spinnerRef = ref(null);
   const buttonTextRef = ref(null);
   const paymentMessageRef = ref(null);
-
-  const cart = useCart();
+  const { cart } = useCart();
+  const user = useSupabaseUser();
+  const checkoutService = new CheckoutService();
 
   const calcTotalCart = () => {
-    let total = 0;
-    cart.value.forEach((product) => {
-      total += product.price;
-    });
-    return total * 100;
+    return cart.value.reduce((acc, item) => acc + item.price, 0);
   };
 
   onMounted(async () => {
-    stripe = await stripe(stripePK);
-    const initialize = async () => {
-      const { data } = await useFetch('/api/stripe/paymentintent', {
-        method: 'post',
-        body: {
-          amount: calcTotalCart()
-        }
-      });
-
-      clientSecret = data.value;
-      console.log(clientSecret);
-
-      const appearance = {
-        theme: 'stripe'
-      };
-
-      const paymentElementOptions = {
-        layouts: 'tabs'
-      };
-
-      elements = stripe.elements({
-        appearance,
-        clientSecret
-      });
-
-      const paymentElement = elements.create('payment', paymentElementOptions);
-      paymentElement.mount(paymentRef.value);
-    };
-
-    initialize();
-    checkStatus();
+    // Initialize any required payment setup
+    if (!user.value) {
+      showMessage('Please login to proceed with checkout');
+      return;
+    }
   });
 
   const handleSubmit = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: 'https://shopiversee.netlify.app/payment-success'
+      if (!user.value) {
+        throw new Error('User not authenticated');
       }
-    });
 
-    if (error.type === 'card_error' || error.type === 'validation_error') {
-      showMessage(error.message);
-    } else {
-      showMessage('An unexpected error occurred.');
+      // Prepare items for checkout
+      const checkoutItems = cart.value.map((item) => ({
+        product_id: item.id,
+        quantity: item.quantity || 1,
+        price: item.price
+      }));
+
+      console.log('Checkout items:', checkoutItems);
+
+      // Process checkout using CheckoutService
+      const order = await checkoutService.processCheckout(
+        user.value.id,
+        checkoutItems
+      );
+
+      if (order) {
+        showMessage('Order placed successfully!');
+        // Clear cart or redirect to success page
+        cart.value = [];
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      showMessage(error.message || 'Error processing checkout');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const checkStatus = async () => {
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    );
+    try {
+      // Implement order status check if needed
 
-    if (!clientSecret) {
-      return;
-    }
-
-    const { paymentIntent } = await stripe.retrievePaymentIntent(clientSecret);
-
-    switch (paymentIntent.status) {
-      case 'succeeded':
-        showMessage('Payment succeeded!');
-        break;
-      case 'processing':
-        showMessage('Your payment is processing.');
-        break;
-      case 'requires_payment_method':
-        showMessage('Your payment was not successful, please try again.');
-        break;
-      default:
-        showMessage('Something went wrong.');
-        break;
+      const orders = await checkoutService.orderServiceInstance.getOrdersByUser(
+        user.value.id
+      );
+      return orders[orders.length - 1]?.status;
+    } catch (error) {
+      console.error('Status check error:', error);
+      return null;
     }
   };
 
-  const showMessage = (messageText) => {
+  const showMessage = (messageText: string) => {
     if (paymentMessageRef.value) {
       paymentMessageRef.value.classList.remove('hidden');
       paymentMessageRef.value.textContent = messageText;
@@ -137,6 +106,8 @@ export function useCheckoutLogic() {
     spinnerRef,
     buttonTextRef,
     paymentMessageRef,
-    handleSubmit
+    handleSubmit,
+    calcTotalCart,
+    checkStatus
   };
 }

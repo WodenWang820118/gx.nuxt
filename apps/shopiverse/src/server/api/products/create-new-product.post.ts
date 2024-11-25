@@ -27,16 +27,20 @@ export default defineEventHandler(async (event) => {
     // Prepare the product data
     const productData: Product = {
       id: String(extractValue(body.id) || crypto.randomUUID()),
+      user_id: String(extractValue(body.user_id) || ''),
       title: String(extractValue(body.title) || ''),
       description: String(extractValue(body.description) || ''),
       image: String(extractValue(body.image) || ''),
       category: String(extractValue(body.category) || ''),
-      price: parseInt(extractValue(body.price) || '0', 10)
+      price: parseInt(extractValue(body.price) || '0', 10),
+      quantity: parseInt(extractValue(body.quantity) || '0', 10)
     };
+
+    console.log('Creating product:', productData);
 
     // First, save to Supabase (source of truth)
     const { data, error } = await supabase
-      .from('Products')
+      .from('products')
       .insert(productData)
       .select()
       .single();

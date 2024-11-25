@@ -1,9 +1,13 @@
+import { useAuthStore } from '../../stores/auth';
+
 export function usePublicNav() {
-  const isAuthenticated = ref(false);
-  const user = useSupabaseUser();
   const supabase = useSupabaseClient();
+  const authStore = useAuthStore();
+  const isAuthenticated = computed(() => authStore.user !== null);
+
   const profileMenuItems = computed(() => {
-    if (!user.value) {
+    console.log('isAuthenticated.value: ', isAuthenticated.value);
+    if (!isAuthenticated.value) {
       return [
         [
           {
@@ -31,14 +35,15 @@ export function usePublicNav() {
           label: 'Logout',
           icon: 'i-heroicons-arrow-left-on-rectangle',
           click: async () => {
-            supabase.auth.signOut();
+            await supabase.auth.signOut();
           }
         }
       ]
     ];
   });
 
-  const navigationLinks = [
+  // Make navigationLinks computed to react to isAuthenticated changes
+  const navigationLinks = computed(() => [
     [
       // Logo section
       {
@@ -46,19 +51,22 @@ export function usePublicNav() {
         to: '/',
         isLogo: true
       },
-      // Main navigation section
-      {
-        label: 'Sell on Shopiverse',
-        icon: 'i-heroicons-shopping-bag',
-        to: '/sell'
-      },
+      ...(isAuthenticated.value
+        ? [
+            {
+              label: 'Sell on Shopiverse',
+              icon: 'i-heroicons-shopping-bag',
+              to: '/sell'
+            }
+          ]
+        : [])
+    ],
+    [
       {
         label: 'About',
         icon: 'i-heroicons-information-circle',
         to: '/about'
-      }
-    ],
-    [
+      },
       {
         label: 'Cart',
         icon: 'i-heroicons-shopping-cart',
@@ -67,10 +75,14 @@ export function usePublicNav() {
       {
         label: 'Profile',
         icon: 'i-heroicons-user-circle',
-        isProfile: true // Add this flag to identify the profile item
+        isProfile: true
       }
     ]
-  ];
+  ]);
+
+  onMounted(async () => {
+    await authStore.initialize();
+  });
 
   return {
     isAuthenticated,

@@ -2,9 +2,7 @@
   <div class="grid h-16 place-items-center">
     <div class="border p-4">
       <form @submit.prevent="handleSubmit">
-        <div ref="paymentRef">
-          <!--Stripe.js injects the Payment Element-->
-        </div>
+        <div ref="paymentRef"> </div>
         <button ref="submitButtonRef">
           <div
             ref="spinnerRef"
