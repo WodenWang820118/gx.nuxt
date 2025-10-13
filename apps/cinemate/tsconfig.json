@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["@nuxt/types"]
+    "types": ["@nuxt/types"],
+    "composite": true
   },
   "files": [],
   "include": [".nuxt/nuxt.d.ts"],
