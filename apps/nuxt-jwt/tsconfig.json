@@ -1,5 +1,7 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "composite": true
+  },
   "files": [],
   "include": [".nuxt/nuxt.d.ts"],
   "references": [

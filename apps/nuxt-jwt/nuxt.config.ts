@@ -8,31 +8,38 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   devServer: {
     host: 'localhost',
-    port: 4200,
+    port: 4200
   },
   typescript: {
-    typeCheck: true,
+    typeCheck: false, // Disable type checking during dev to prevent file generation
     tsConfig: {
       extends: '../tsconfig.app.json', // Nuxt copies this string as-is to the `./.nuxt/tsconfig.json`, therefore it needs to be relative to that directory
-    },
+      compilerOptions: {
+        declaration: false,
+        declarationMap: false,
+        sourceMap: false,
+        emitDeclarationOnly: false,
+        noEmit: true
+      }
+    }
   },
   imports: {
-    autoImport: true,
+    autoImport: true
   },
   css: [],
   vite: {
-    plugins: [nxViteTsPaths()],
+    plugins: [nxViteTsPaths()]
   },
   modules: ['@pinia/nuxt', '@nuxt/ui'],
   routeRules: {
-    '/login': { prerender: true },
+    '/login': { prerender: true }
   },
   ssr: false,
   sourcemap: {
     server: true,
-    client: true,
+    client: true
   },
   features: {
-    devLogs: true, // or 'silent' to handle logs yourself
-  },
+    devLogs: true // or 'silent' to handle logs yourself
+  }
 });
