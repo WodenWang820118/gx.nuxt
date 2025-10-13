@@ -1,17 +1,8 @@
 {
   "compilerOptions": {
-    "types": ["@nuxt/types"],
-    "composite": true
+    "types": ["@nuxt/types"]
   },
   "files": [],
   "include": [".nuxt/nuxt.d.ts"],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    }
-  ],
   "extends": "../../tsconfig.base.json"
 }
