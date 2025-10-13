@@ -51,3 +51,19 @@ Thumbs.db
 .vercel
 # Secrets
 .env
+
+# Generated TypeScript files (should not be committed)
+**/*.vue.js
+**/*.vue.js.map
+**/*.vue.d.ts
+apps/*/src/**/*.js
+apps/*/src/**/*.js.map
+apps/*/src/**/*.d.ts
+!apps/*/src/**/*.config.js
+!apps/*/src/**/*.spec.js
+!apps/*/src/**/*.test.js
+
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

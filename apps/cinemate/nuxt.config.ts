@@ -11,16 +11,23 @@ export default defineNuxtConfig({
     port: 4200
   },
   typescript: {
-    typeCheck: true,
+    typeCheck: false, // Disable type checking during dev to prevent file generation
     tsConfig: {
-      extends: '../tsconfig.app.json' // Nuxt copies this string as-is to the `./.nuxt/tsconfig.json`, therefore it needs to be relative to that directory
+      extends: '../tsconfig.app.json', // Nuxt copies this string as-is to the `./.nuxt/tsconfig.json`, therefore it needs to be relative to that directory
+      compilerOptions: {
+        declaration: false,
+        declarationMap: false,
+        sourceMap: false,
+        emitDeclarationOnly: false,
+        noEmit: true
+      }
     }
   },
   imports: {
     autoImport: true
   },
 
-  css: ['~/assets/css/styles.scss'],
+  css: ['~/assets/css/styles.css'],
 
   vite: {
     plugins: [nxViteTsPaths()]

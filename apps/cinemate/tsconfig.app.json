@@ -1,9 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "composite": true,
-    "declaration": true
+    "target": "esnext"
   },
   "include": [".nuxt/nuxt.d.ts", "src/**/*"],
   "exclude": [
