@@ -85,7 +85,7 @@ export default defineNuxtConfig({
       loginUri:
         process.env.NODE_ENV === 'development'
           ? 'http://localhost:4200'
-          : 'https://gx-nuxt-shopiverse.vercel.app',
+          : 'https://gx-vue-shopiverse.vercel.app',
       googleClientId:
         '312492860184-lrraqf5544cq3vjc915booficli8ilp3.apps.googleusercontent.com'
     }

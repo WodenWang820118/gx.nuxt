@@ -69,7 +69,7 @@ export function useRegisterLogic() {
     const redirectUrl =
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:4200'
-        : 'https://gx-nuxt-shopiverse.vercel.app';
+        : 'https://gx-vue-shopiverse.vercel.app';
 
     return `${redirectUrl}`;
   };
