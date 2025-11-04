@@ -9,7 +9,8 @@
     "dev:shopiverse": "cross-env-shell NODE_ENV=development \"nx serve shopiverse\"",
     "format-shopiverse": "nx format:write --projects=shopiverse --skip-nx-cache",
     "build-shopiverse": "nx build shopiverse --prod",
-    "dev:nuxt-jwt": "nx serve nuxt-jwt"
+    "dev:nuxt-jwt": "nx serve nuxt-jwt",
+    "dev:fireblog": "nx serve fireblog"
   },
   "private": true,
   "devDependencies": {
