@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
+  - '@firebase/util'
   - '@parcel/watcher'
   - '@prisma/client'
   - '@prisma/engines'
@@ -7,6 +8,8 @@ onlyBuiltDependencies:
   - esbuild
   - nx
   - prisma
+  - protobufjs
   - sharp
+  - sqlite3
   - unrs-resolver
   - vue-demi
