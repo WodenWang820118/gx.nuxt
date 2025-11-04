@@ -1,29 +1,21 @@
 import { defineEventHandler } from 'h3';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { getDataSource } from '../../database';
+import { Product } from '../../entities/Product';
+import { ILike } from 'typeorm';
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const queryItem = query?.input || '';
 
   const safeQueryItem = String(queryItem);
-  const items = await prisma.products.findMany({
-    where: {
-      OR: [
-        {
-          title: {
-            contains: safeQueryItem,
-            mode: 'insensitive'
-          }
-        },
-        {
-          description: {
-            contains: safeQueryItem,
-            mode: 'insensitive'
-          }
-        }
-      ]
-    }
+  const dataSource = await getDataSource();
+  const productRepository = dataSource.getRepository(Product);
+
+  const items = await productRepository.find({
+    where: [
+      { title: ILike(`%${safeQueryItem}%`) },
+      { description: ILike(`%${safeQueryItem}%`) }
+    ]
   });
 
   return items;

@@ -1,9 +1,10 @@
 import { defineEventHandler } from 'h3';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { getDataSource } from '../../database';
+import { Product } from '../../entities/Product';
 
 export default defineEventHandler(async () => {
-  // TODO: query products from the database and use Prisma as the cache ORM
-  const products = await prisma.products.findMany();
+  const dataSource = await getDataSource();
+  const productRepository = dataSource.getRepository(Product);
+  const products = await productRepository.find();
   return products;
 });

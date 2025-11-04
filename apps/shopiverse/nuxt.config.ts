@@ -36,18 +36,9 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/icon',
     '@pinia/nuxt',
-    '@nuxtjs/supabase',
     '@nuxtjs/tailwindcss',
     'nuxt-security'
   ],
-  // if not configuring the supabase redirect as false,
-  // users cannot access the app without being authenticated
-  supabase: {
-    url: process.env.NUXT_SUPABASE_URL,
-    key: process.env.NUXT_SUPABASE_KEY,
-    redirect: false
-  },
-  // TODO: cross origin opener google athentication
   security: {
     headers: {
       crossOriginResourcePolicy: 'cross-origin',

@@ -1,6 +1,6 @@
 import { defineEventHandler, getRouterParam, createError } from 'h3';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { getDataSource } from '../../../database';
+import { Product } from '../../../entities/Product';
 
 export default defineEventHandler(async (event) => {
   const productID = getRouterParam(event, 'id');
@@ -11,7 +11,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const product = await prisma.products.findFirst({
+  const dataSource = await getDataSource();
+  const productRepository = dataSource.getRepository(Product);
+  const product = await productRepository.findOne({
     where: {
       id: String(productID)
     }

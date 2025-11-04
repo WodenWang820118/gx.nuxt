@@ -1,8 +1,8 @@
 import { OrderItem } from '../utils/product.interface';
 import { v4 as uuidv4 } from 'uuid';
-export class OrderItemService {
-  private supabase = useSupabaseClient();
 
+// Simplified OrderItemService for demonstration purposes
+export class OrderItemService {
   async createOrderItems(
     orderId: string,
     items: Array<{
@@ -20,27 +20,13 @@ export class OrderItemService {
       subtotal: item.price * item.quantity
     }));
 
-    const { data, error } = await this.supabase
-      .from('order_items')
-      .insert(orderItems)
-      .select();
-
-    if (error) throw error;
-    return data;
+    // Mock implementation for demo
+    return orderItems;
   }
 
   async getOrderItems(orderId: string): Promise<OrderItem[]> {
-    const { data, error } = await this.supabase
-      .from('order_items')
-      .select(
-        `
-        *,
-        products (*)
-      `
-      )
-      .eq('order_id', orderId);
-
-    if (error) throw error;
-    return data;
+    // Mock implementation for demo
+    console.log(`Getting order items for order ${orderId}`);
+    return [];
   }
 }

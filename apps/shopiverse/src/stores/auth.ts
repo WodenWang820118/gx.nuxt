@@ -1,38 +1,17 @@
-import { User } from '@supabase/supabase-js';
-
+// Simplified auth store without Supabase (for demonstration purposes)
 export const useAuthStore = defineStore('auth', () => {
-  const user: Ref<User | null> = ref(null);
+  const user: Ref<{ id: string; email: string } | null> = ref(null);
   const loading = ref(false);
   const error = ref(null);
-  const supabase = useSupabaseClient();
 
-  const setUser = (newUser: User | null) => {
+  const setUser = (newUser: { id: string; email: string } | null) => {
     user.value = newUser;
-  };
-
-  const getSupabaseClient = () => {
-    return supabase;
   };
 
   const initialize = async () => {
     loading.value = true;
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Auth initialization error:', error);
-    }
-
-    if (data.user) {
-      setUser(data.user);
-    }
-
-    // Set up auth state listener
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-      } else {
-        setUser(null);
-      }
-    });
+    // Mock initialization for demo
+    loading.value = false;
   };
 
   return {
@@ -40,7 +19,6 @@ export const useAuthStore = defineStore('auth', () => {
     loading,
     error,
     setUser,
-    getSupabaseClient,
     initialize
   };
 });

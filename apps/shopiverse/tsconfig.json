@@ -8,7 +8,7 @@
     }
   ],
   "compilerOptions": {
-    "types": ["@nuxt/types", "@supabase/shared-types"]
+    "types": ["@nuxt/types"]
   },
   "include": [".nuxt/nuxt.d.ts"],
   "extends": "../../tsconfig.base.json"

@@ -1,13 +1,8 @@
-import { PrismaClient } from '@prisma/client';
 import { defineEventHandler, readBody } from 'h3';
-import { serverSupabaseClient } from '#supabase/server';
-import { Product } from '~/utils/product.interface';
+import { getDataSource } from '../../database';
+import { Product } from '../../entities/Product';
 
 export default defineEventHandler(async (event) => {
-  const prisma = new PrismaClient();
-  // TODO: enable RLS to let users create products after authentication
-  // product should be having a user_id column as a foreign key
-  const supabase = await serverSupabaseClient<Product>(event);
   try {
     const body = await readBody(event);
 
@@ -25,7 +20,7 @@ export default defineEventHandler(async (event) => {
     };
 
     // Prepare the product data
-    const productData: Product = {
+    const productData: Partial<Product> = {
       id: String(extractValue(body.id) || crypto.randomUUID()),
       user_id: String(extractValue(body.user_id) || ''),
       title: String(extractValue(body.title) || ''),
@@ -38,24 +33,14 @@ export default defineEventHandler(async (event) => {
 
     console.log('Creating product:', productData);
 
-    // First, save to Supabase (source of truth)
-    const { data, error } = await supabase
-      .from('products')
-      .insert(productData)
-      .select()
-      .single();
-
-    if (error) throw error;
-
-    // Then, cache in Prisma
-    const prismaProduct = await prisma.products.create({
-      data: productData
-    });
+    const dataSource = await getDataSource();
+    const productRepository = dataSource.getRepository(Product);
+    const product = productRepository.create(productData);
+    const savedProduct = await productRepository.save(product);
 
     return {
       success: true,
-      data: data,
-      cached: prismaProduct
+      data: savedProduct
     };
   } catch (err) {
     console.error('Error creating product:', err);
@@ -63,7 +48,5 @@ export default defineEventHandler(async (event) => {
       success: false,
       error: err instanceof Error ? err.message : 'Unknown error occurred'
     };
-  } finally {
-    await prisma.$disconnect();
   }
 });

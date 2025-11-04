@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "esnext"
   },
-  "include": [".nuxt/nuxt.d.ts", "src/**/*", "src/prisma"],
+  "include": [".nuxt/nuxt.d.ts", "src/**/*"],
   "exclude": [
     "vite.config.ts",
     "vitest.config.ts",

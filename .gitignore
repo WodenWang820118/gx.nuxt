@@ -67,3 +67,11 @@ vite.config.*.timestamp*
 vitest.config.*.timestamp*
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+
+# TypeORM migrations
+apps/shopiverse/src/server/migrations/*.ts

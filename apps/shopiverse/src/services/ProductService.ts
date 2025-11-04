@@ -1,27 +1,16 @@
 import { Product } from '../utils/product.interface';
 
+// Simplified ProductService using server API (for demonstration purposes)
 export class ProductService {
-  private supabase = useSupabaseClient();
-
   async getProduct(id: string): Promise<Product | null> {
-    const { data, error } = await this.supabase
-      .from('products')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
+    const data = await $fetch<Product>(
+      `/api/products/find-product-by-id/${id}`
+    );
     return data;
   }
 
   async checkStock(productId: string, quantity: number): Promise<boolean> {
-    const { data, error } = await this.supabase
-      .from('products')
-      .select('quantity')
-      .eq('id', productId)
-      .single();
-
-    if (error) throw error;
-    return data.quantity >= quantity;
+    const product = await this.getProduct(productId);
+    return product ? product.quantity >= quantity : false;
   }
 }
