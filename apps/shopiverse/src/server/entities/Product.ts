@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   Entity,
   PrimaryColumn,
@@ -8,28 +9,28 @@ import {
 
 @Entity('products')
 export class Product {
-  @PrimaryColumn('varchar')
+  @PrimaryColumn({ type: 'varchar', length: 255 })
   id!: string;
 
-  @Column('varchar')
+  @Column({ type: 'varchar', length: 255 })
   user_id!: string;
 
-  @Column('varchar')
+  @Column({ type: 'varchar', length: 500 })
   title!: string;
 
-  @Column('text', { nullable: true })
+  @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column('varchar', { nullable: true })
+  @Column({ type: 'varchar', length: 1000, nullable: true })
   image?: string;
 
-  @Column('varchar', { nullable: true })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   category?: string;
 
-  @Column('integer')
+  @Column({ type: 'int' })
   quantity!: number;
 
-  @Column('integer')
+  @Column({ type: 'int' })
   price!: number;
 
   @CreateDateColumn()

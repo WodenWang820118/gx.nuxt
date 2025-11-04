@@ -1,9 +1,9 @@
 import { Product } from '../../utils/product.interface';
 import { v4 as uuidv4 } from 'uuid';
+import { useAuthStore } from '../../stores/auth';
 
 export function useSellLogic() {
-  const supabase = useSupabaseClient();
-  const user = useSupabaseUser();
+  const authStore = useAuthStore();
   const productTitle = useState<string | null>(() => null);
   const productDescription = useState<string | null>(() => null);
   const productPrice = useState<number | null>(() => null);
@@ -42,23 +42,22 @@ export function useSellLogic() {
 
     const image = productImage.value;
     try {
-      const { data } = await supabase.storage
-        .from('images')
-        .upload(`public/${image.name}`, image, {
-          cacheControl: '3600',
-          upsert: false,
-          contentType: image.type
-        });
+      // Upload image to your backend API
+      const formData = new FormData();
+      formData.append('image', image);
+
+      const data = await $fetch<{ url: string }>('/api/upload/image', {
+        method: 'POST',
+        body: formData
+      });
 
       if (data) {
         imageUploadSuccessMsg.value = 'Image Uploaded';
-        const { data } = supabase.storage
-          .from('images')
-          .getPublicUrl(`public/${image.name}`);
-        imageUrl.value = data.publicUrl;
+        imageUrl.value = data.url;
       }
     } catch (err) {
-      imageUploadErrorMsg.value = err.message;
+      imageUploadErrorMsg.value =
+        err instanceof Error ? err.message : 'Failed to upload image';
     }
   };
 
@@ -66,7 +65,7 @@ export function useSellLogic() {
     try {
       const newProduct: Product = {
         id: uuidv4(),
-        user_id: user.value.id as string,
+        user_id: authStore.user?.id as string,
         title: productTitle.value,
         description: productDescription.value,
         image: imageUrl.value,
@@ -89,12 +88,12 @@ export function useSellLogic() {
         await navigateTo(`/products/${productID}`);
       }, 2000);
     } catch (error) {
-      productCreationErrorMsg.value = `Error creating product: ${error.message}`;
+      productCreationErrorMsg.value = `Error creating product: ${error instanceof Error ? error.message : 'Unknown error'}`;
     }
   };
 
   onMounted(() => {
-    if (!user) {
+    if (!authStore.user) {
       navigateTo('/login');
     }
   });

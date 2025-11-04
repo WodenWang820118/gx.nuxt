@@ -1,7 +1,6 @@
 import { useAuthStore } from '../../stores/auth';
 
 export function usePublicNav() {
-  const supabase = useSupabaseClient();
   const authStore = useAuthStore();
   const isAuthenticated = computed(() => authStore.user !== null);
 
@@ -35,7 +34,13 @@ export function usePublicNav() {
           label: 'Logout',
           icon: 'i-heroicons-arrow-left-on-rectangle',
           click: async () => {
-            await supabase.auth.signOut();
+            try {
+              await $fetch('/api/auth/logout', { method: 'POST' });
+              authStore.setUser(null);
+              await navigateTo('/');
+            } catch (error) {
+              console.error('Logout failed:', error);
+            }
           }
         }
       ]

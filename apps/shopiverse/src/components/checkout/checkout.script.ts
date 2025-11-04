@@ -1,6 +1,7 @@
 import { ref, onMounted } from 'vue';
 import { useCart } from '../../composables/state';
 import { CheckoutService } from '../../services/CheckoutService';
+import { useAuthStore } from '../../stores/auth';
 
 export function useCheckoutLogic() {
   const paymentRef = ref(null);
@@ -9,7 +10,7 @@ export function useCheckoutLogic() {
   const buttonTextRef = ref(null);
   const paymentMessageRef = ref(null);
   const { cart } = useCart();
-  const user = useSupabaseUser();
+  const authStore = useAuthStore();
   const checkoutService = new CheckoutService();
 
   const calcTotalCart = () => {
@@ -18,7 +19,7 @@ export function useCheckoutLogic() {
 
   onMounted(async () => {
     // Initialize any required payment setup
-    if (!user.value) {
+    if (!authStore.user) {
       showMessage('Please login to proceed with checkout');
       return;
     }
@@ -28,7 +29,7 @@ export function useCheckoutLogic() {
     try {
       setLoading(true);
 
-      if (!user.value) {
+      if (!authStore.user) {
         throw new Error('User not authenticated');
       }
 
@@ -43,7 +44,7 @@ export function useCheckoutLogic() {
 
       // Process checkout using CheckoutService
       const order = await checkoutService.processCheckout(
-        user.value.id,
+        authStore.user.id,
         checkoutItems
       );
 
@@ -54,7 +55,9 @@ export function useCheckoutLogic() {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      showMessage(error.message || 'Error processing checkout');
+      showMessage(
+        error instanceof Error ? error.message : 'Error processing checkout'
+      );
     } finally {
       setLoading(false);
     }
@@ -62,10 +65,13 @@ export function useCheckoutLogic() {
 
   const checkStatus = async () => {
     try {
-      // Implement order status check if needed
+      if (!authStore.user) {
+        return null;
+      }
 
+      // Implement order status check if needed
       const orders = await checkoutService.orderServiceInstance.getOrdersByUser(
-        user.value.id
+        authStore.user.id
       );
       return orders[orders.length - 1]?.status;
     } catch (error) {

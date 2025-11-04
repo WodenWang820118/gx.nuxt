@@ -1,35 +1,41 @@
 import { GoogleSignInResponse } from '../utils/google.interface';
-import { User, Session } from '@supabase/supabase-js';
 
 export class AuthService {
   handleSignInWithGoogle = async (response: GoogleSignInResponse) => {
     try {
-      // https://supabase.com/docs/guides/auth/social-login/auth-google?queryGroups=framework&framework=sveltekit&queryGroups=environment&environment=client#configure-your-services-id
-      const { data, error } = await useSupabaseClient().auth.signInWithIdToken({
-        provider: 'google',
-        token: response.credential
+      // Implement Google sign-in with your backend API
+      console.log('Google sign-in response:', response);
+
+      // Example: Send to your backend API
+      const data = await $fetch('/api/auth/google', {
+        method: 'POST',
+        body: {
+          credential: response.credential
+        }
       });
 
       console.log('data: ', data);
-      return { data, error };
+      return { data, error: null };
     } catch (error) {
-      console.error('Supabase auth error:', error);
+      console.error('Auth error:', error);
       return { data: null, error };
     }
   };
 
   login = async (email: string, password: string) => {
     try {
-      const { data, error } = await useSupabaseClient().auth.signInWithPassword(
-        {
-          email: email,
-          password: password
+      // Implement login with your backend API
+      const data = await $fetch('/api/auth/login', {
+        method: 'POST',
+        body: {
+          email,
+          password
         }
-      );
+      });
 
-      return { data, error };
+      return { data, error: null };
     } catch (error) {
-      console.error('Supabase auth error:', error);
+      console.error('Auth error:', error);
       return { data: null, error };
     }
   };

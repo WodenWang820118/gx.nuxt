@@ -8,7 +8,9 @@
     }
   ],
   "compilerOptions": {
-    "types": ["@nuxt/types"]
+    "types": ["@nuxt/types"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [".nuxt/nuxt.d.ts"],
   "extends": "../../tsconfig.base.json"

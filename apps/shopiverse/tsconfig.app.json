@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "esnext"
+    "target": "esnext",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [".nuxt/nuxt.d.ts", "src/**/*"],
   "exclude": [

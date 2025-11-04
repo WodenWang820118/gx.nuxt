@@ -1,7 +1,6 @@
 import { z } from 'zod';
+
 export function useRegisterLogic() {
-  const supabase = useSupabaseClient();
-  const user = useSupabaseUser();
   const successMsg = useState<string>(() => '');
   const errorMsg = useState<string>(() => '');
   const validationErrors = ref<Record<string, string>>({});
@@ -85,28 +84,28 @@ export function useRegisterLogic() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
-      email: state.email,
-      password: state.password,
-      options: {
-        data: {
+    try {
+      // Call your backend API for registration
+      await $fetch('/api/auth/register', {
+        method: 'POST',
+        body: {
+          email: state.email,
+          password: state.password,
           full_name: state.userName,
-          address: state.address
-        },
-        emailRedirectTo: getRedirectUrl()
-      }
-    });
+          address: state.address,
+          emailRedirectTo: getRedirectUrl()
+        }
+      });
 
-    if (error) {
-      errorMsg.value = error.message;
-      return;
+      successMsg.value = 'Redirecting...';
+      setTimeout(async () => {
+        successMsg.value = '';
+        await navigateTo('/confirm');
+      }, 2000);
+    } catch (error) {
+      errorMsg.value =
+        error instanceof Error ? error.message : 'Registration failed';
     }
-
-    successMsg.value = 'Redirecting...';
-    setTimeout(async () => {
-      successMsg.value = '';
-      await navigateTo('/confirm');
-    }, 2000);
   };
 
   // Watch for changes to validate in real-time

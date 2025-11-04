@@ -1,5 +1,6 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { defineNuxtConfig } from 'nuxt/config';
+import swc from 'unplugin-swc';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -30,7 +31,32 @@ export default defineNuxtConfig({
   css: ['~/assets/css/styles.scss'],
 
   vite: {
-    plugins: [nxViteTsPaths()]
+    plugins: [
+      nxViteTsPaths(),
+      swc.vite({
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            decorators: true
+          },
+          transform: {
+            legacyDecorator: true,
+            decoratorMetadata: true
+          },
+          target: 'es2021'
+        }
+      })
+    ],
+    optimizeDeps: {
+      include: ['reflect-metadata']
+    },
+    esbuild: {
+      tsconfigRaw: {
+        compilerOptions: {
+          experimentalDecorators: true
+        }
+      }
+    }
   },
   modules: [
     '@nuxt/ui',
@@ -43,7 +69,30 @@ export default defineNuxtConfig({
     headers: {
       crossOriginResourcePolicy: 'cross-origin',
       crossOriginOpenerPolicy: 'same-origin-allow-popups',
-      referrerPolicy: 'strict-origin-when-cross-origin'
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      contentSecurityPolicy: {
+        'img-src': ["'self'", 'data:', 'https:', 'blob:'],
+        'script-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'https://cdn.jsdelivr.net',
+          'https://js.stripe.com',
+          'https://accounts.google.com'
+        ],
+        'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+        'connect-src': [
+          "'self'",
+          'https://cdn.jsdelivr.net',
+          'https://accounts.google.com'
+        ],
+        'worker-src': ["'self'", 'blob:'],
+        'child-src': ["'self'", 'blob:'],
+        'frame-src': [
+          "'self'",
+          'https://js.stripe.com',
+          'https://accounts.google.com'
+        ]
+      }
     }
   },
   app: {
@@ -77,10 +126,38 @@ export default defineNuxtConfig({
     preset: 'vercel',
     output: {
       dir: '../../.vercel/output'
+    },
+    rollupConfig: {
+      plugins: [
+        swc.rollup({
+          jsc: {
+            parser: {
+              syntax: 'typescript',
+              decorators: true
+            },
+            transform: {
+              legacyDecorator: true,
+              decoratorMetadata: true
+            },
+            target: 'es2021'
+          }
+        })
+      ]
+    },
+    typescript: {
+      tsConfig: {
+        compilerOptions: {
+          experimentalDecorators: true,
+          emitDecoratorMetadata: true
+        }
+      }
     }
   },
   compatibilityDate: '2024-11-04',
   runtimeConfig: {
+    // Private keys (only available server-side)
+    databaseUrl: process.env.DATABASE_URL || '',
+    nodeEnv: process.env.NODE_ENV || 'development',
     public: {
       loginUri:
         process.env.NODE_ENV === 'development'

@@ -39,7 +39,7 @@
               class="overflow-hidden rounded-lg bg-white p-4 shadow-lg dark:bg-gray-800"
             >
               <img
-                :src="image || '/images/placeholder.png'"
+                :src="image || '/images/place-holder.png'"
                 :alt="title"
                 class="h-full w-full object-contain"
               />
@@ -74,12 +74,12 @@
             <div class="space-y-4">
               <div class="flex items-center space-x-4">
                 <span class="text-4xl font-bold text-gray-900 dark:text-white">
-                  ${{ price + 100 }}
+                  {{ formatPrice(price) }}
                 </span>
                 <span
                   class="text-2xl font-medium text-gray-500 line-through dark:text-gray-400"
                 >
-                  ${{ (price + 100) * 2 }}
+                  {{ formatPrice(price * 2) }}
                 </span>
                 <span
                   class="rounded-full bg-green-100 px-4 py-1 text-sm font-semibold text-green-800"
@@ -98,7 +98,7 @@
                   dark:focus:ring-blue-800"
                 @click="addToCart({ ...product, quantity: 1 })"
               >
-                <span v-if="alreadyInCart(product) && user">Item Added</span>
+                <span v-if="alreadyInCart(product)">Item Added</span>
                 <span v-else>Add to Cart</span>
               </button>
             </div>
@@ -110,8 +110,9 @@
 </template>
 
 <script setup lang="ts">
-  import { CartItem, Product } from '../../utils/product.interface';
+  import { Product } from '../../utils/product.interface';
   import { useProductLogic } from './product.script';
+  import { formatPrice } from '../../utils/format';
 
   defineProps<{
     id: string;
@@ -123,6 +124,5 @@
     product: Product;
   }>();
 
-  const user = useSupabaseUser();
   const { getRandomRating, addToCart, alreadyInCart, cart } = useProductLogic();
 </script>

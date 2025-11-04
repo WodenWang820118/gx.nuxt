@@ -1,8 +1,9 @@
 import { Product } from '../../utils/product.interface';
+import { useAuthStore } from '../../stores/auth';
 
 export function useProductLogic() {
   const product = ref<Product | null>(null);
-  const user = useSupabaseUser();
+  const authStore = useAuthStore();
   const { cart } = useCart();
 
   const alreadyInCart = (productToCheck: Product) => {
@@ -16,7 +17,7 @@ export function useProductLogic() {
   };
 
   const addToCart = (product: Product) => {
-    if (user.value) {
+    if (authStore.user) {
       const item = cart.value.find((item) => item.id === product.id);
       cart.value.push({
         ...product,

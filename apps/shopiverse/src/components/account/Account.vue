@@ -146,15 +146,17 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { ref, onMounted, Ref } from 'vue';
+  import { ref, onMounted } from 'vue';
+  import { useAuthStore } from '../../stores/auth';
+
   const userName = ref('');
   const userEmail = ref('');
-  const user = useSupabaseUser();
+  const authStore = useAuthStore();
 
   onMounted(() => {
-    if (user.value) {
-      userName.value = user.value.user_metadata.full_name;
-      userEmail.value = user.value.email;
+    if (authStore.user) {
+      userName.value = authStore.user.full_name || '';
+      userEmail.value = authStore.user.email || '';
     }
   });
 </script>

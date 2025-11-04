@@ -47,31 +47,38 @@
 </template>
 
 <script setup lang="ts">
-  const supabase = useSupabaseClient();
-  const user = useSupabaseUser();
+  import { useAuthStore } from '../../stores/auth';
+
+  const authStore = useAuthStore();
   const successMsg = useState<string | null>(() => null);
   const errorMsg = useState<string | null>(() => null);
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      successMsg.value = null;
-      errorMsg.value = error.message;
-      return;
-    }
+    try {
+      // Call your backend API for logout
+      await $fetch('/api/auth/logout', {
+        method: 'POST'
+      });
 
-    successMsg.value = 'Hope to see you again soon, Redirecting...';
-    setTimeout(async () => {
+      // Clear the user from auth store
+      authStore.setUser(null);
+
+      successMsg.value = 'Hope to see you again soon, Redirecting...';
+      setTimeout(async () => {
+        successMsg.value = null;
+        await navigateTo('/');
+      }, 2000);
+    } catch (error) {
       successMsg.value = null;
-      await navigateTo('/');
-    }, 2000);
+      errorMsg.value = error instanceof Error ? error.message : 'Logout failed';
+    }
   };
 
   definePageMeta({
     middleware: [
       async () => {
-        const user = useSupabaseUser();
-        if (!user.value) await navigateTo('/login');
+        const authStore = useAuthStore();
+        if (!authStore.user) await navigateTo('/login');
       }
     ]
   });
