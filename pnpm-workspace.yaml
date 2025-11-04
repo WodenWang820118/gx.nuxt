@@ -1,3 +1,7 @@
+packages:
+  - 'apps/*'
+  - 'docs/*'
+
 onlyBuiltDependencies:
   - '@firebase/util'
   - '@parcel/watcher'
