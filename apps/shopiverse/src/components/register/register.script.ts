@@ -1,9 +1,15 @@
 import { z } from 'zod';
+import { useAuthStore } from '../../stores/auth';
 
 export function useRegisterLogic() {
+  const authStore = useAuthStore();
   const successMsg = useState<string>(() => '');
   const errorMsg = useState<string>(() => '');
   const validationErrors = ref<Record<string, string>>({});
+  const isGoogleLoading = ref(false);
+
+  // Log when component is initialized
+  console.log('🟦 [REGISTER SCRIPT] Component initialized');
 
   const schema = z.object({
     email: z
@@ -40,8 +46,8 @@ export function useRegisterLogic() {
       schema.shape[field].parse(value);
       validationErrors.value[field] = '';
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        validationErrors.value[field] = error.errors[0].message;
+      if (error instanceof z.ZodError && error.issues.length > 0) {
+        validationErrors.value[field] = error.issues[0].message;
       }
     }
   };
@@ -54,7 +60,7 @@ export function useRegisterLogic() {
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        error.errors.forEach((err) => {
+        error.issues.forEach((err) => {
           if (err.path[0]) {
             validationErrors.value[err.path[0].toString()] = err.message;
           }
@@ -62,15 +68,6 @@ export function useRegisterLogic() {
       }
       return false;
     }
-  };
-
-  const getRedirectUrl = () => {
-    const redirectUrl =
-      process.env.NODE_ENV === 'development'
-        ? 'http://localhost:4200'
-        : 'https://gx-vue-shopiverse.vercel.app';
-
-    return `${redirectUrl}`;
   };
 
   const signUp = async () => {
@@ -85,26 +82,60 @@ export function useRegisterLogic() {
     }
 
     try {
-      // Call your backend API for registration
-      await $fetch('/api/auth/register', {
-        method: 'POST',
-        body: {
-          email: state.email,
-          password: state.password,
-          full_name: state.userName,
-          address: state.address,
-          emailRedirectTo: getRedirectUrl()
-        }
-      });
+      await authStore.register(
+        state.email,
+        state.password,
+        state.userName,
+        state.address
+      );
 
-      successMsg.value = 'Redirecting...';
+      successMsg.value = 'Registration successful! Redirecting...';
       setTimeout(async () => {
         successMsg.value = '';
-        await navigateTo('/confirm');
+        await navigateTo('/');
       }, 2000);
     } catch (error) {
       errorMsg.value =
         error instanceof Error ? error.message : 'Registration failed';
+    }
+  };
+
+  const signUpWithGoogle = async () => {
+    console.log('[REGISTER] 🔵 FUNCTION ENTRY - signUpWithGoogle called!');
+
+    try {
+      console.log('[REGISTER] 🔵 Inside try block');
+      // Clear previous messages
+      successMsg.value = '';
+      errorMsg.value = '';
+      isGoogleLoading.value = true;
+
+      console.log('[REGISTER] Starting Google sign-up...');
+      console.log('[REGISTER] Auth store exists:', !!authStore);
+      console.log(
+        '[REGISTER] Auth store.loginWithGoogle exists:',
+        !!authStore.loginWithGoogle
+      );
+
+      const result = await authStore.loginWithGoogle();
+      console.log('[REGISTER] Google sign-up result:', result);
+
+      successMsg.value = 'Sign in successful! Redirecting...';
+      setTimeout(async () => {
+        successMsg.value = '';
+        await navigateTo('/');
+      }, 1500);
+    } catch (error) {
+      console.error('[REGISTER] 🔴 CAUGHT ERROR in signUpWithGoogle:', error);
+      console.error('[REGISTER] Error type:', typeof error);
+      console.error('[REGISTER] Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown',
+        stack: error instanceof Error ? error.stack : 'No stack',
+        error: error
+      });
+      errorMsg.value =
+        error instanceof Error ? error.message : 'Google sign-in failed';
+      isGoogleLoading.value = false;
     }
   };
 
@@ -125,6 +156,8 @@ export function useRegisterLogic() {
     successMsg,
     errorMsg,
     signUp,
+    signUpWithGoogle,
+    isGoogleLoading,
     schema
   };
 }

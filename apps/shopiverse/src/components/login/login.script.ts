@@ -1,59 +1,90 @@
 import { useAuthStore } from '../../stores/auth';
-import { AuthService } from '../../services/AuthService';
-import { GoogleSignInResponse } from '../../utils/google.interface';
 
 export function useLoginLogic() {
   const authStore = useAuthStore();
-  const authService = new AuthService();
-  const email = useState<string | null>(() => null);
-  const password = useState<string | null>(() => null);
-  const successMsg = useState<string | null>(() => null);
-  const errorMsg = useState<string | null>(() => null);
+  const email = useState<string>(() => '');
+  const password = useState<string>(() => '');
+  const successMsg = useState<string>(() => '');
+  const errorMsg = useState<string>(() => '');
+  const loading = ref(false);
+  const isGoogleLoading = ref(false);
+
+  // Log when component is initialized
+  console.log('🟩 [LOGIN SCRIPT] Component initialized');
 
   const login = async () => {
-    const res = await authService.login(email.value, password.value);
-    if (res.error) {
-      successMsg.value = null;
-      errorMsg.value = res.error.message;
+    // Clear previous messages
+    successMsg.value = '';
+    errorMsg.value = '';
+
+    if (!email.value || !password.value) {
+      errorMsg.value = 'Please enter email and password';
       return;
     }
-    console.log('User signed in');
-    console.log('User: ', res.data?.user);
-    authStore.setUser(res.data?.user || null);
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
-  };
 
-  const handleSignInWithGoogle = async (response: GoogleSignInResponse) => {
-    const res = await authService.handleSignInWithGoogle(response);
-    if (res.error) {
-      successMsg.value = null;
-      errorMsg.value = res.error.message;
-      return;
+    loading.value = true;
+
+    try {
+      await authStore.login(email.value, password.value);
+
+      successMsg.value = 'Login successful! Redirecting...';
+      setTimeout(async () => {
+        successMsg.value = '';
+        await navigateTo('/');
+      }, 1500);
+    } catch (error) {
+      errorMsg.value = error instanceof Error ? error.message : 'Login failed';
+    } finally {
+      loading.value = false;
     }
-    console.log('data: ', res.data);
-    authStore.setUser(res.data.user);
-    errorMsg.value = null;
-    successMsg.value = 'Redirecting...';
   };
 
-  watch(
-    () => authStore.user,
-    (user) => {
-      if (user) {
-        console.log('User signed in');
-        console.log('User: ', user);
-        navigateTo('/');
+  const loginWithGoogle = async () => {
+    console.log('[LOGIN] 🟢 loginWithGoogle called! (from LOGIN page)');
+    // Clear previous messages
+    successMsg.value = '';
+    errorMsg.value = '';
+    isGoogleLoading.value = true;
+
+    try {
+      console.log('[LOGIN] Starting Google login...');
+      console.log('[LOGIN] Auth store exists:', !!authStore);
+      console.log(
+        '[LOGIN] Auth store.loginWithGoogle exists:',
+        !!authStore.loginWithGoogle
+      );
+
+      const result = await authStore.loginWithGoogle();
+      console.log('[LOGIN] Google login result:', result);
+
+      if (result && 'redirecting' in result && result.redirecting) {
+        console.log('[LOGIN] Redirecting to Google...');
+        // Don't show success message or navigate - we're redirecting
+        // Don't reset isGoogleLoading - we're leaving the page
+        return;
       }
+
+      successMsg.value = 'Sign in successful! Redirecting...';
+      setTimeout(async () => {
+        successMsg.value = '';
+        await navigateTo('/');
+      }, 1500);
+    } catch (error) {
+      console.error('[LOGIN] Google login error:', error);
+      errorMsg.value =
+        error instanceof Error ? error.message : 'Google sign-in failed';
+      isGoogleLoading.value = false;
     }
-  );
+  };
 
   return {
     email,
     password,
+    loading,
+    isGoogleLoading,
     successMsg,
     errorMsg,
     login,
-    handleSignInWithGoogle
+    loginWithGoogle
   };
 }

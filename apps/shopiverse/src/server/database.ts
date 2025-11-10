@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { Product } from './entities/Product';
+import { User } from './entities/User';
 
 // Determine database configuration based on environment
 const isDevelopment =
@@ -17,7 +18,7 @@ if (isDevelopment) {
     database: './apps/shopiverse/database.sqlite',
     synchronize: true, // Auto-create tables (for demo purposes only!)
     logging: false,
-    entities: [Product],
+    entities: [Product, User],
     migrations: [],
     subscribers: []
   };
@@ -34,7 +35,7 @@ if (isDevelopment) {
     url: databaseUrl,
     synchronize: false, // Don't auto-create tables in production
     logging: false,
-    entities: [Product],
+    entities: [Product, User],
     migrations: [],
     subscribers: [],
     ssl: {

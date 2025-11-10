@@ -58,43 +58,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  modules: [
-    '@nuxt/ui',
-    '@nuxt/icon',
-    '@pinia/nuxt',
-    '@nuxtjs/tailwindcss',
-    'nuxt-security'
-  ],
-  security: {
-    headers: {
-      crossOriginResourcePolicy: 'cross-origin',
-      crossOriginOpenerPolicy: 'same-origin-allow-popups',
-      referrerPolicy: 'strict-origin-when-cross-origin',
-      contentSecurityPolicy: {
-        'img-src': ["'self'", 'data:', 'https:', 'blob:'],
-        'script-src': [
-          "'self'",
-          "'unsafe-inline'",
-          'https://cdn.jsdelivr.net',
-          'https://js.stripe.com',
-          'https://accounts.google.com'
-        ],
-        'style-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
-        'connect-src': [
-          "'self'",
-          'https://cdn.jsdelivr.net',
-          'https://accounts.google.com'
-        ],
-        'worker-src': ["'self'", 'blob:'],
-        'child-src': ["'self'", 'blob:'],
-        'frame-src': [
-          "'self'",
-          'https://js.stripe.com',
-          'https://accounts.google.com'
-        ]
-      }
-    }
-  },
+  modules: ['@nuxt/ui', '@nuxt/icon', '@pinia/nuxt', '@nuxtjs/tailwindcss'],
   app: {
     head: {
       link: [
@@ -126,6 +90,14 @@ export default defineNuxtConfig({
     preset: 'vercel',
     output: {
       dir: '../../.vercel/output'
+    },
+    routeRules: {
+      '/**': {
+        headers: {
+          'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+          'Cross-Origin-Embedder-Policy': 'unsafe-none'
+        }
+      }
     },
     rollupConfig: {
       plugins: [
@@ -164,7 +136,15 @@ export default defineNuxtConfig({
           ? 'http://localhost:4200'
           : 'https://gx-vue-shopiverse.vercel.app',
       googleClientId:
-        '312492860184-lrraqf5544cq3vjc915booficli8ilp3.apps.googleusercontent.com'
+        '312492860184-lrraqf5544cq3vjc915booficli8ilp3.apps.googleusercontent.com',
+      // Firebase configuration
+      firebaseApiKey: 'AIzaSyB87I48tXzjVC3BiEdFfxPPcj9YsMldGcs',
+      firebaseAuthDomain: 'shopiverse-1b323.firebaseapp.com',
+      firebaseProjectId: 'shopiverse-1b323',
+      firebaseStorageBucket: 'shopiverse-1b323.firebasestorage.app',
+      firebaseMessagingSenderId: '706722258181',
+      firebaseAppId: '1:706722258181:web:3a2ad6c75dc31b2c33eb6c',
+      firebaseMeasurementId: 'G-Y4ZGFBHEPK'
     }
   }
 });
