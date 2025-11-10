@@ -1,8 +1,15 @@
 import { useAuthStore } from '../../stores/auth';
+import { useCart } from '../../composables/state';
 
 export function usePublicNav() {
   const authStore = useAuthStore();
+  const { cart } = useCart();
   const isAuthenticated = computed(() => authStore.user !== null);
+
+  // Calculate total number of items in cart
+  const cartItemCount = computed(() => {
+    return cart.value.reduce((total, item) => total + item.quantity, 0);
+  });
 
   const profileMenuItems = computed(() => {
     console.log('isAuthenticated.value: ', isAuthenticated.value);
@@ -75,7 +82,8 @@ export function usePublicNav() {
       {
         label: 'Cart',
         icon: 'i-heroicons-shopping-cart',
-        to: '/cart'
+        to: '/cart',
+        isCart: true
       },
       {
         label: 'Profile',
@@ -92,6 +100,7 @@ export function usePublicNav() {
   return {
     isAuthenticated,
     profileMenuItems,
-    navigationLinks
+    navigationLinks,
+    cartItemCount
   };
 }

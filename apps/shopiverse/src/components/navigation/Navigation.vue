@@ -31,6 +31,21 @@
                 >
               </UDropdown>
             </template>
+            <!-- Cart with badge -->
+            <template v-else-if="link.isCart">
+              <span
+                class="group-hover:text-primary-500 relative flex items-center gap-2"
+              >
+                {{ link.label }}
+                <UBadge
+                  v-if="cartItemCount > 0"
+                  :label="cartItemCount.toString()"
+                  color="red"
+                  variant="solid"
+                  size="xs"
+                />
+              </span>
+            </template>
             <!-- Regular navigation items -->
             <span
               v-else
@@ -47,5 +62,5 @@
 
 <script setup lang="ts">
   import { usePublicNav } from './navigtaion.script';
-  const { navigationLinks, profileMenuItems } = usePublicNav();
+  const { navigationLinks, profileMenuItems, cartItemCount } = usePublicNav();
 </script>
