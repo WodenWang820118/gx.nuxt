@@ -18,92 +18,105 @@
       {{ error.message }}
     </UAlert>
 
+    <!-- Filter/Sort Controls (always visible when data is loaded) -->
+    <div
+      v-if="!pending && !error && products.length > 0"
+      class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <USelect
+        v-model="sortBy"
+        :options="[
+          { label: 'Price: Low to High', value: 'price-asc' },
+          { label: 'Price: High to Low', value: 'price-desc' },
+          { label: 'Name: A-Z', value: 'name-asc' },
+          { label: 'Name: Z-A', value: 'name-desc' }
+        ]"
+        placeholder="Sort by"
+        class="w-full sm:w-auto"
+      />
+      <UInput
+        v-model="searchQuery"
+        icon="i-heroicons-magnifying-glass"
+        placeholder="Search products..."
+        class="w-full sm:max-w-xs"
+      />
+    </div>
+
     <!-- Products Grid -->
-    <template v-if="filteredProducts.length">
-      <!-- Optional: Filter/Sort Controls -->
-      <div class="mb-6 flex items-center justify-between">
-        <USelect
-          v-model="sortBy"
-          :options="[
-            { label: 'Price: Low to High', value: 'price-asc' },
-            { label: 'Price: High to Low', value: 'price-desc' },
-            { label: 'Name: A-Z', value: 'name-asc' },
-            { label: 'Name: Z-A', value: 'name-desc' }
-          ]"
-          placeholder="Sort by"
-        />
-        <UInput
-          v-model="searchQuery"
-          icon="i-heroicons-magnifying-glass"
-          placeholder="Search products..."
-          class="max-w-xs"
-        />
-      </div>
+    <div
+      v-if="!pending && !error && filteredProducts.length > 0"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    >
+      <ProductComp
+        v-for="product in filteredProducts"
+        :key="product.id"
+        :product="product"
+        v-bind="product"
+      />
+    </div>
 
-      <!-- Products Grid -->
-      <div
-        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
-      >
-        <ProductComp
-          v-for="product in filteredProducts"
-          :key="product.id"
-          :product="product"
-          v-bind="product"
-        />
-      </div>
+    <!-- Empty State (no search results) -->
+    <UAlert
+      v-if="
+        !pending &&
+        !error &&
+        products.length > 0 &&
+        filteredProducts.length === 0
+      "
+      icon="i-heroicons-information-circle"
+      color="blue"
+      variant="soft"
+      title="No products found"
+      description="No products found matching your criteria. Try adjusting your search."
+      class="mt-4"
+    />
 
-      <!-- Empty State -->
-      <UAlert
-        v-if="filteredProducts.length === 0"
-        icon="i-heroicons-information-circle"
-        color="red"
-        variant="soft"
-        class="mt-4"
-      >
-        No products found matching your criteria
-      </UAlert>
-
-      <!-- Pagination Controls -->
-      <div
-        v-if="pagination"
-        class="mt-8 flex items-center justify-center gap-4"
-      >
+    <!-- Pagination Controls (only when not searching) -->
+    <div
+      v-if="
+        !pending && !error && pagination && !searchQuery && products.length > 0
+      "
+    >
+      <section class="mt-6 flex justify-center gap-2">
         <UButton
           :disabled="currentPage === 1"
+          size="md"
           @click="changePage(currentPage - 1)"
         >
           Previous
         </UButton>
 
-        <div class="flex gap-2">
-          <UButton
-            v-for="pageNum in displayedPages"
-            :key="pageNum"
-            :variant="pageNum === currentPage ? 'solid' : 'outline'"
-            @click="changePage(pageNum)"
-          >
-            {{ pageNum }}
-          </UButton>
-        </div>
+        <UButton
+          v-for="pageNum in displayedPages"
+          :key="pageNum"
+          :size="'sm'"
+          :variant="pageNum === currentPage ? 'solid' : 'outline'"
+          @click="changePage(pageNum)"
+        >
+          {{ pageNum }}
+        </UButton>
 
         <UButton
           :disabled="currentPage === pagination.totalPages"
+          size="md"
           @click="changePage(currentPage + 1)"
         >
           Next
         </UButton>
-      </div>
+      </section>
+    </div>
 
-      <!-- Pagination Info -->
-      <div
-        v-if="pagination"
-        class="mt-4 text-center text-sm text-gray-600"
-      >
-        Showing {{ (currentPage - 1) * pagination.limit + 1 }} to
-        {{ Math.min(currentPage * pagination.limit, pagination.total) }} of
-        {{ pagination.total }} products
-      </div>
-    </template>
+    <!-- Pagination Info (only when not searching) -->
+    <div
+      v-if="
+        !pending && !error && pagination && !searchQuery && products.length > 0
+      "
+      class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400"
+    >
+      Showing {{ (currentPage - 1) * pagination.limit + 1 }} to
+      {{ Math.min(currentPage * pagination.limit, pagination.total) }} of
+      {{ pagination.total }} products
+    </div>
   </UContainer>
 </template>
 
